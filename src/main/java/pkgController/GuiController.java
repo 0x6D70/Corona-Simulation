@@ -18,7 +18,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -46,38 +45,35 @@ import pkgSubjects.Person.HEALTHSTATUS;
 public class GuiController implements Initializable, EventThreadControllerListener {
 
 	@FXML
-    private Label lblMessage;
+	private TextField txtFieldPersons;
 
-    @FXML
-    private TextField txtFieldPersons;
-    
-    @FXML
-    private TextField txtFieldInfective;
+	@FXML
+	private Slider sliderDangerousDistance;
 
-    @FXML
-    private Button btnGenerate;
+	@FXML
+	private TextField txtFieldInfective;
 
-    @FXML
-    private Button btnStart;
+	@FXML
+	private Button btnGenerate;
 
-    @FXML
-    private Button btnStop;
+	@FXML
+	private Button btnStart;
 
-    @FXML
-    private Button btnLog;
-    
-    @FXML
-    private Slider sliderDangerousDistance;
-    
-    @FXML
-    private ListView<String> lstView;
-    
-    @FXML
-    private ListView<Person> lstViewHealthStatus;
-    
-    @FXML
-    private Pane simulationArea;
+	@FXML
+	private Button btnStop;
 
+	@FXML
+	private Button btnLog;
+
+	@FXML
+	private ListView<String> lstView;
+
+	@FXML
+	private ListView<Person> lstViewHealthStatus;
+
+	@FXML
+	private Pane simulationArea;
+	    
     @FXML
     void onBtnClicked(ActionEvent event) {    	    	
     	try {
@@ -94,18 +90,18 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	    		tc.generateThreads(numberPersons);
 	    	} else if (event.getSource().equals(btnStart)) {
 	    		tc.startThreads();
-	    		this.startTime = System.currentTimeMillis();
+	    		//this.startTime = System.currentTimeMillis();
 	    	} else if (event.getSource().equals(btnStop)) {
 	    		tc.stopThreads();
 	    		
-	    		long endTime = System.currentTimeMillis();
+	    		//long endTime = System.currentTimeMillis();
 	    		
-	    		Platform.runLater(() -> this.lblMessage.setText("simulation lasted " + (endTime - this.startTime) + " msec."));
+	    		//Platform.runLater(() -> this.lblMessage.setText("simulation lasted " + (endTime - this.startTime) + " msec."));
 	    	} else if (event.getSource().equals(btnLog)) {
 	    		readLogFromFile();
 	    	}
     	} catch (Exception ex) {
-    		this.lblMessage.setText(ex.getMessage());
+    		//this.lblMessage.setText(ex.getMessage());
     		ex.printStackTrace();
     	}
     }
@@ -133,7 +129,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
     			SimulationConstants.setCurrentDangerousDistance(newValue.doubleValue());
     		});
     	} catch (Exception ex) {
-    		this.lblMessage.setText(ex.getMessage());
+    		//this.lblMessage.setText(ex.getMessage());
     		ex.printStackTrace();
     	}
     }
@@ -150,13 +146,13 @@ public class GuiController implements Initializable, EventThreadControllerListen
     private Image imgInfective;
     private Image imgSuspect;
     
-    private long startTime = 0;
+    //private long startTime = 0;
     
     private void readLogFromFile() throws IOException {    	
     	obsHealth.clear();
     	obsHealth.addAll(tc.getPersonsSortedByHealth());
     	
-    	this.lblMessage.setText("log displayed ...");
+    	//this.lblMessage.setText("log displayed ...");
     }
     
     private void deleteImages() {
@@ -213,7 +209,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			ImageView img = ia.getImageView();
 			img.setImage(getImageFromHealth(ia.getHealthStatus()));
 		} else {
-			Platform.runLater(() -> this.lblMessage.setText("Threads: " + event.getEventThreadType().name()));	
+			//Platform.runLater(() -> this.lblMessage.setText("Threads: " + event.getEventThreadType().name()));	
 		}
 	}
 	

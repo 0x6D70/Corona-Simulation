@@ -20,7 +20,8 @@ public class App extends Application {
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
-        stage.setTitle("Corona V5");
+        stage.setTitle("Corona V4");
+        stage.setFullScreen(true);
         stage.show();
     }
 
