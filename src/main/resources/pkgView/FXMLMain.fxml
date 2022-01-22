@@ -32,6 +32,6 @@
       <Label layoutX="32.0" layoutY="183.0" text="event log" />
       <Label layoutX="30.0" layoutY="714.0" text="health status" />
       <ListView fx:id="lstViewHealthStatus" layoutX="31.0" layoutY="741.0" prefHeight="302.0" prefWidth="368.0" />
-      <Pane fx:id="simulationArea" layoutX="465.0" layoutY="211.0" prefHeight="832.0" prefWidth="1417.0" style="-fx-background-color: lavender;" />
+      <Pane fx:id="simulationArea" layoutX="465.0" layoutY="211.0" prefHeight="830.0" prefWidth="1400.0" style="-fx-background-color: lavender;" />
     </children>
 </AnchorPane>
