@@ -21,7 +21,7 @@ public class App extends Application {
         
         stage.setScene(scene);
         stage.setTitle("Corona V5");
-        //stage.setFullScreen(true);
+        stage.setFullScreen(true);
         stage.show();
     }
 

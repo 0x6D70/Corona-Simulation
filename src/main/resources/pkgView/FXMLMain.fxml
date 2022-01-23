@@ -4,20 +4,21 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
 <AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pkgController.GuiController">
     <children>
-      <Pane layoutX="186.0" layoutY="28.0" prefHeight="147.0" prefWidth="965.0" style="-fx-background-color: lavender;">
+      <Pane layoutX="186.0" layoutY="28.0" prefHeight="147.0" prefWidth="554.0" style="-fx-background-color: lavender;">
          <children>
-            <TextField fx:id="txtFieldPersons" layoutX="112.0" layoutY="5.0" prefHeight="26.0" prefWidth="48.0" />
-            <Label layoutX="15.0" layoutY="8.0" text="# of Persons: " />
-            <Label layoutX="14.0" layoutY="38.0" text="dangerous distance:" />
-            <Slider fx:id="sliderDangerousDistance" blockIncrement="5.0" layoutX="172.0" layoutY="38.0" majorTickUnit="5.0" max="50.0" min="15.0" minorTickCount="1" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="20.0" />
-            <Label layoutX="186.0" layoutY="10.0" text="\% infective:" />
-            <TextField fx:id="txtFieldInfective" layoutX="274.0" layoutY="5.0" prefHeight="26.0" prefWidth="48.0" />
+            <Label layoutX="19.0" layoutY="21.0" text="\% infective:" />
+            <Slider fx:id="sliderTests" layoutX="121.0" layoutY="94.0" showTickLabels="true" showTickMarks="true" value="50.0" />
+            <Label layoutX="279.0" layoutY="92.0" text="\% vaccinated" />
+            <Slider fx:id="sliderVaccinated" layoutX="391.0" layoutY="92.0" showTickLabels="true" showTickMarks="true" value="75.0" />
+            <Slider fx:id="sliderFollowingRules" layoutX="394.0" layoutY="23.0" showTickLabels="true" showTickMarks="true" value="75.0" />
+            <Label layoutX="274.0" layoutY="23.0" text="\% following rules" />
+            <Slider fx:id="sliderInfective" layoutX="123.0" layoutY="21.0" majorTickUnit="10.0" max="30.0" showTickLabels="true" showTickMarks="true" value="10.0" />
+            <Label layoutX="17.0" layoutY="93.0" text="\% tests: usefull" />
          </children>
       </Pane>
       <Pane layoutX="34.0" layoutY="29.0" prefHeight="147.0" prefWidth="134.0" style="-fx-background-color: lavender;">
@@ -28,10 +29,8 @@
             <Button fx:id="btnLog" layoutX="13.0" layoutY="107.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="104.0" text="Log" />
          </children>
       </Pane>
-      <ListView fx:id="lstView" layoutX="31.0" layoutY="210.0" prefHeight="500.0" prefWidth="368.0" />
+      <ListView fx:id="lstView" layoutX="31.0" layoutY="210.0" prefHeight="828.0" prefWidth="368.0" />
       <Label layoutX="32.0" layoutY="183.0" text="event log" />
-      <Label layoutX="30.0" layoutY="714.0" text="health status" />
-      <ListView fx:id="lstViewHealthStatus" layoutX="31.0" layoutY="741.0" prefHeight="302.0" prefWidth="368.0" />
       <Pane fx:id="simulationArea" layoutX="465.0" layoutY="211.0" prefHeight="830.0" prefWidth="1400.0" style="-fx-background-color: lavender;" />
     </children>
 </AnchorPane>
