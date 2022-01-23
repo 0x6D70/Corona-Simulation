@@ -26,6 +26,17 @@ public class SimulationConstants {
 	public static final int TILE_HEIGHT = 10;
 	public static final int TILE_WIDTH = 10;
 	
+	public static final int TILE_COUNT_WIDTH = 140;
+	public static final int TILE_COUNT_HEIGHT = 83;
+	
+	public static final int TILE_ID_FLOOR = 0;
+	public static final int TILE_ID_WALL = 1;
+	public static final int TILE_ID_TOILET = 2;
+	public static final int TILE_ID_PUPIL_SEAT = 4;
+	public static final int TILE_ID_TEACHER_SEAT_CLASS = 5;
+	public static final int TILE_ID_TEACHER_SEAT_CHAMBER = 6;
+	public static final int TILE_ID_ENTRANCE = 7;
+	
 	private static double currentDangerousDistance = 20;
 	private static int percentInfectedAtStart = 0;
 	
