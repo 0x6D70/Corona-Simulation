@@ -35,6 +35,7 @@ import pkgMisc.EventThreadControllerObject;
 import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerObject.EVENTTYPE;
 import pkgMisc.IImageAnimation;
+import pkgMisc.MapLoader;
 import pkgSubjects.Person;
 import pkgSubjects.Person.HEALTHSTATUS;
 
@@ -108,7 +109,10 @@ public class GuiController implements Initializable, EventThreadControllerListen
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    	try {    		
+    	try {
+    		MapLoader ml = new MapLoader();
+    		ml.loadMap(simulationArea);
+    		
     		imgHealthy = new Image(getClass().getResourceAsStream(SimulationConstants.FILE_PERSON_HEALTHY));
     		imgInfected = new Image(getClass().getResourceAsStream(SimulationConstants.FILE_PERSON_INFECTED));
     		imgInfective = new Image(getClass().getResourceAsStream(SimulationConstants.FILE_PERSON_INFECTIVE));

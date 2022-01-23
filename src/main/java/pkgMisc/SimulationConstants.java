@@ -19,6 +19,13 @@ public class SimulationConstants {
 	public static final String FILE_PERSON_INFECTIVE = "/images/infective.jpg";
 	public static final String FILE_PERSON_SUSPECT = "/images/suspect.jpg";
 	
+	public static final String FILE_MAP = "/map/map.tmx";
+	public static final String FILE_TILE_SET = "/map/tileset.tsx";
+	public static final String DIR_MAP_IMG_FILES = "/map/";
+	
+	public static final int TILE_HEIGHT = 10;
+	public static final int TILE_WIDTH = 10;
+	
 	private static double currentDangerousDistance = 20;
 	private static int percentInfectedAtStart = 0;
 	
