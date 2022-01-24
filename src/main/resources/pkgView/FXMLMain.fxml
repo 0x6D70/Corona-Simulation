@@ -26,7 +26,6 @@
             <Button fx:id="btnGenerate" layoutX="12.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="104.0" text="Generate" />
             <Button fx:id="btnStart" layoutX="12.0" layoutY="45.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="104.0" text="Start" />
             <Button fx:id="btnStop" layoutX="13.0" layoutY="76.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="104.0" text="Stop" />
-            <Button fx:id="btnLog" layoutX="13.0" layoutY="107.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="104.0" text="Log" />
          </children>
       </Pane>
       <ListView fx:id="lstView" layoutX="31.0" layoutY="210.0" prefHeight="828.0" prefWidth="368.0" />

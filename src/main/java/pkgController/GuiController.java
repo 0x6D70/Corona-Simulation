@@ -5,7 +5,6 @@
  */
 package pkgController;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,14 +28,12 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 import pkgMisc.CellFactoryListView;
-import pkgMisc.CellFactoryListViewHealthStatus;
 import pkgMisc.EventThreadControllerListener;
 import pkgMisc.EventThreadControllerObject;
 import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerObject.EVENTTYPE;
 import pkgMisc.IImageAnimation;
 import pkgMisc.MapLoader;
-import pkgSubjects.Person;
 import pkgSubjects.Person.HEALTHSTATUS;
 
 /**
@@ -47,9 +44,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
 
 	@FXML
 	private TextField txtFieldPersons;
-
-	@FXML
-	private Slider sliderDangerousDistance;
 
 	@FXML
 	private TextField txtFieldInfective;
@@ -70,9 +64,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	private ListView<String> lstView;
 
 	@FXML
-	private ListView<Person> lstViewHealthStatus;
-
-	@FXML
 	private Pane simulationArea;
 	    
     @FXML
@@ -86,7 +77,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	    		
 	    		deleteImages();
 	    		obsStrings.clear();
-	    		obsHealth.clear();
 	    		
 	    		tc.generateThreads(numberPersons);
 	    	} else if (event.getSource().equals(btnStart)) {
@@ -98,8 +88,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	    		//long endTime = System.currentTimeMillis();
 	    		
 	    		//Platform.runLater(() -> this.lblMessage.setText("simulation lasted " + (endTime - this.startTime) + " msec."));
-	    	} else if (event.getSource().equals(btnLog)) {
-	    		readLogFromFile();
 	    	}
     	} catch (Exception ex) {
     		//this.lblMessage.setText(ex.getMessage());
@@ -124,14 +112,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
     		obsStrings = FXCollections.observableArrayList();
     		lstView.setCellFactory(new CellFactoryListView());
     		lstView.setItems(obsStrings);
-    		
-    		obsHealth = FXCollections.observableArrayList();
-    		lstViewHealthStatus.setItems(obsHealth);
-    		lstViewHealthStatus.setCellFactory(new CellFactoryListViewHealthStatus());
-    		
-    		sliderDangerousDistance.valueProperty().addListener((observable, oldValue, newValue) -> {
-    			SimulationConstants.setCurrentDangerousDistance(newValue.doubleValue());
-    		});
     	} catch (Exception ex) {
     		//this.lblMessage.setText(ex.getMessage());
     		ex.printStackTrace();
@@ -143,21 +123,11 @@ public class GuiController implements Initializable, EventThreadControllerListen
     
     private ThreadController tc = null;
     private ObservableList<String> obsStrings;
-    private ObservableList<Person> obsHealth;
     
     private Image imgHealthy;
     private Image imgInfected;
     private Image imgInfective;
     private Image imgSuspect;
-    
-    //private long startTime = 0;
-    
-    private void readLogFromFile() throws IOException {    	
-    	obsHealth.clear();
-    	obsHealth.addAll(tc.getPersonsSortedByHealth());
-    	
-    	//this.lblMessage.setText("log displayed ...");
-    }
     
     private void deleteImages() {
     	simulationArea.getChildren().clear();
