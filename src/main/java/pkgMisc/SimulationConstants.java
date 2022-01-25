@@ -38,6 +38,7 @@ public class SimulationConstants {
 	public static final int TILE_ID_ENTRANCE = 7;
 	
 	public static final int NUMBER_OF_LESSONS = 2;
+	public static final int SLEEP_BETWEEN_ANIMATION = 5000;
 	
 	private static double currentDangerousDistance = 20;
 	private static int percentInfectedAtStart = 0;

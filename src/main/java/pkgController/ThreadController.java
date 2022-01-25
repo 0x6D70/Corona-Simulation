@@ -99,7 +99,7 @@ public class ThreadController implements PropertyChangeListener {
 		new Thread( new Runnable() {
 	        public void run()  {
 	        	try {
-		            Thread.sleep(5000); // 2s Animation time -> pupil sit for
+		            Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION); // 2s Animation time -> pupil sit for
 		            
 		            for (int i = 0; i < SimulationConstants.NUMBER_OF_LESSONS; i++) {
 		            	int counter = 0;
@@ -112,7 +112,7 @@ public class ThreadController implements PropertyChangeListener {
 		            		}
 		            	}
 		            	
-		            	Thread.sleep(5000);
+		            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
 		            	
 		            	for (Person p : persons) {
 		            		if (p.getJobStatus() == JOBSTATUS.TEACHER && !p.getCord().equals(p.getMainPosition()) ) {
@@ -121,7 +121,7 @@ public class ThreadController implements PropertyChangeListener {
 		            		}
 		            	}
 		            	
-		            	Thread.sleep(5000);
+		            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
 		            }
 	
 		            // move back to entrance
