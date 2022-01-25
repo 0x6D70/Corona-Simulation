@@ -3,7 +3,6 @@ package pkgController;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -23,7 +22,7 @@ import pkgSubjects.Person.JOBSTATUS;
 public class ThreadController implements PropertyChangeListener {
 	private ArrayList<Person> persons = new ArrayList<>();
 	private ArrayList<EventThreadControllerListener> evtThreadListener = new ArrayList<>();
-	private FileWriter writer = null;
+	private ArrayList<Coordinate> teacherSeats = new ArrayList<>();
 	
 	private Coordinate entrance = null;
 		
@@ -62,6 +61,10 @@ public class ThreadController implements PropertyChangeListener {
 					entrance = new Coordinate(
 						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
 					);
+				} else if (type == TILE_TYPES.TEACHER_SEAT_CLASS) {
+					teacherSeats.add(new Coordinate(
+						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
+					));
 				}
 			}
 		}
@@ -91,6 +94,46 @@ public class ThreadController implements PropertyChangeListener {
 			break;
 		}
 		*/
+		
+		// sleep without blocking the thread
+		new Thread( new Runnable() {
+	        public void run()  {
+	        	try {
+		            Thread.sleep(5000); // 2s Animation time -> pupil sit for
+		            
+		            for (int i = 0; i < SimulationConstants.NUMBER_OF_LESSONS; i++) {
+		            	int counter = 0;
+		            	
+		            	for (Person p : persons) {
+		            		if (p.getJobStatus() == JOBSTATUS.TEACHER && counter != teacherSeats.size()) {
+		            			p.setCoordinate(teacherSeats.get(counter));
+		            			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+		            			counter++;
+		            		}
+		            	}
+		            	
+		            	Thread.sleep(5000);
+		            	
+		            	for (Person p : persons) {
+		            		if (p.getJobStatus() == JOBSTATUS.TEACHER && !p.getCord().equals(p.getMainPosition()) ) {
+		            			p.setCoordinate(p.getMainPosition());
+		            			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+		            		}
+		            	}
+		            	
+		            	Thread.sleep(5000);
+		            }
+	
+		            // move back to entrance
+		            for (Person p : persons) {
+		    			p.setCoordinate(new Coordinate(entrance));
+		    			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+		    		}
+	        	} catch (Exception ex) {
+	        		ex.printStackTrace();
+	        	}
+	        }
+	    } ).start();
 	}
 
 	@Override

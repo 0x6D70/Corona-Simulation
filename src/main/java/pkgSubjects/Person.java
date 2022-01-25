@@ -2,7 +2,6 @@ package pkgSubjects;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Random;
 
 import javafx.scene.image.ImageView;
 import pkgData.Coordinate;
@@ -19,7 +18,6 @@ public class Person implements IImageAnimation {
 	private Coordinate oldCord = null;
 	private Coordinate mainPosition = null;
 
-	private Random rnd;
 	private int contacts;
 	private int infectiveContacts;
 	private HEALTHSTATUS health = HEALTHSTATUS.HEALTHY;
@@ -38,7 +36,6 @@ public class Person implements IImageAnimation {
 		
 		this.name = dp.getNextName();
 		this.cord = new Coordinate(0,0);
-		this.rnd = new Random();
 		this.pcsCord = new PropertyChangeSupport(this);
 		this.contacts = 0;
 		this.infectiveContacts = 0;
@@ -69,6 +66,7 @@ public class Person implements IImageAnimation {
 		this.pcsCord.addPropertyChangeListener(pcl);
 	}
 	
+	/*
 	private void calculateNewPos() throws InterruptedException {		
 		int posX = rnd.nextInt(SimulationConstants.MAX_LENGTH_ROOM);
 		int posY = rnd.nextInt(SimulationConstants.MAX_WIDTH_ROOM);
@@ -82,6 +80,7 @@ public class Person implements IImageAnimation {
 		long sleep = (long) (Math.random() * ((SimulationConstants.MAX_DURATION_STAYING - SimulationConstants.MIN_DURATION_STAYING) * 1000) + SimulationConstants.MIN_DURATION_STAYING * 1000);
 		Thread.sleep(sleep);
 	}
+	*/
 	
 	public JOBSTATUS getJobStatus() {
 		return jobStatus;
