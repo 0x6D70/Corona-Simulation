@@ -18,8 +18,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -43,12 +41,6 @@ import pkgSubjects.Person.HEALTHSTATUS;
 public class GuiController implements Initializable, EventThreadControllerListener {
 
 	@FXML
-	private TextField txtFieldPersons;
-
-	@FXML
-	private TextField txtFieldInfective;
-
-	@FXML
 	private Button btnGenerate;
 
 	@FXML
@@ -69,16 +61,8 @@ public class GuiController implements Initializable, EventThreadControllerListen
     @FXML
     void onBtnClicked(ActionEvent event) {    	    	
     	try {
-	    	if (event.getSource().equals(btnGenerate)) {
-	    		int numberPersons = Integer.parseInt(txtFieldPersons.getText());
-	    		int numberInfective = Integer.parseInt(txtFieldInfective.getText());
-	    		
-	    		SimulationConstants.setPercentInfectedAtStart(numberInfective);
-	    		
-	    		deleteImages();
-	    		obsStrings.clear();
-	    		
-	    		tc.generateThreads(numberPersons);
+	    	if (event.getSource().equals(btnGenerate)) {	    		    			    		
+	    		tc.generateThreads(0);
 	    	} else if (event.getSource().equals(btnStart)) {
 	    		tc.startThreads();
 	    		//this.startTime = System.currentTimeMillis();
@@ -128,10 +112,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
     private Image imgInfected;
     private Image imgInfective;
     private Image imgSuspect;
-    
-    private void deleteImages() {
-    	simulationArea.getChildren().clear();
-    }
 
 	@Override
 	public void onEventThreadControllerChanged(EventThreadControllerObject event) {

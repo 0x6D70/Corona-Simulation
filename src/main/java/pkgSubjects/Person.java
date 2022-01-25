@@ -12,14 +12,19 @@ import pkgMisc.SimulationConstants;
 
 public class Person extends Thread implements IImageAnimation {
 	public enum HEALTHSTATUS { INFECTIVE, INFECTED, SUSPECT, HEALTHY };
+	public enum JOBSTATUS { TEACHER, PUPIL };
 	
 	private String name;
 	private Coordinate cord = null;
 	private Coordinate oldCord = null;
+	private Coordinate mainPosition = null;
+
 	private Random rnd;
 	private int contacts;
 	private int infectiveContacts;
 	private HEALTHSTATUS health = HEALTHSTATUS.HEALTHY;
+	private JOBSTATUS jobStatus = JOBSTATUS.PUPIL;
+
 	private ImageView imgView = null;
 	private boolean isMoving = false;
 	
@@ -32,7 +37,7 @@ public class Person extends Thread implements IImageAnimation {
 			dp = new DataPool();
 		
 		this.name = dp.getNextName();
-		cord = new Coordinate(0,0);
+		this.cord = new Coordinate(0,0);
 		this.rnd = new Random();
 		this.pcsCord = new PropertyChangeSupport(this);
 		this.contacts = 0;
@@ -86,6 +91,22 @@ public class Person extends Thread implements IImageAnimation {
 	private void simulateLingering() throws InterruptedException {
 		long sleep = (long) (Math.random() * ((SimulationConstants.MAX_DURATION_STAYING - SimulationConstants.MIN_DURATION_STAYING) * 1000) + SimulationConstants.MIN_DURATION_STAYING * 1000);
 		Thread.sleep(sleep);
+	}
+	
+	public JOBSTATUS getJobStatus() {
+		return jobStatus;
+	}
+
+	public void setJobStatus(JOBSTATUS jobStatus) {
+		this.jobStatus = jobStatus;
+	}
+	
+	public Coordinate getMainPosition() {
+		return mainPosition;
+	}
+
+	public void setMainPosition(Coordinate mainPosition) {
+		this.mainPosition = mainPosition;
 	}
 	
 	public Coordinate getCord() {

@@ -23,8 +23,8 @@ public class SimulationConstants {
 	public static final String FILE_TILE_SET = "/map/tileset.tsx";
 	public static final String DIR_MAP_IMG_FILES = "/map/";
 	
-	public static final int TILE_HEIGHT = 10;
-	public static final int TILE_WIDTH = 10;
+	public static final int TILE_HEIGHT = 8;
+	public static final int TILE_WIDTH = 8;
 	
 	public static final int TILE_COUNT_WIDTH = 140;
 	public static final int TILE_COUNT_HEIGHT = 83;

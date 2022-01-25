@@ -25,9 +25,9 @@ public class MapLoader {
 		ENTRANCE
 	}
 	
-	TILE_TYPES[][] tileTypes = new TILE_TYPES[SimulationConstants.TILE_COUNT_HEIGHT][SimulationConstants.TILE_COUNT_WIDTH];
+	private static TILE_TYPES[][] tileTypes = new TILE_TYPES[SimulationConstants.TILE_COUNT_HEIGHT][SimulationConstants.TILE_COUNT_WIDTH];
 	
-	public TILE_TYPES[][] getTileTypes() {
+	public static TILE_TYPES[][] getTileTypes() {
 		return tileTypes;
 	}
 

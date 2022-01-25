@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import pkgData.Coordinate;
 import pkgMisc.EventThreadControllerListener;
 import pkgMisc.EventThreadControllerObject;
+import pkgMisc.MapLoader;
 import pkgMisc.EventThreadControllerObject.EVENTTYPE;
+import pkgMisc.MapLoader.TILE_TYPES;
 import pkgMisc.PersonComparator;
 import pkgMisc.PersonHealthComparator;
 import pkgMisc.SimulationConstants;
@@ -32,6 +34,21 @@ public class ThreadController implements PropertyChangeListener {
 		persons.clear();
 		Person.resetDataPool();
 		
+		TILE_TYPES[][] tileTypes = MapLoader.getTileTypes();
+		
+		/*
+		for (int y = 0; y < SimulationConstants.TILE_COUNT_HEIGHT; y++) {
+			for (int x = 0; x < SimulationConstants.TILE_COUNT_WIDTH; x++) {
+				TILE_TYPES type = tileTypes[y][x];
+				
+				if (type == TILE_TYPES.PUPIL_SEAT) {
+					
+				}
+			}
+		}
+		*/
+		
+		
 		for (int i = 0; i < count; i++) {
 			Person p = new Person();
 			p.addPropertyChangeListener(this);
@@ -45,6 +62,9 @@ public class ThreadController implements PropertyChangeListener {
 			
 			persons.add(p);
 		}
+		
+		
+		
 		
 		notifyEvtThreadListener(EventThreadControllerObject.EVENTTYPE.ALL_GENERATED);
 	}
