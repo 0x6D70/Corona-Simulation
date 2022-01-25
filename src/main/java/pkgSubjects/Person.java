@@ -10,7 +10,7 @@ import pkgData.DataPool;
 import pkgMisc.IImageAnimation;
 import pkgMisc.SimulationConstants;
 
-public class Person extends Thread implements IImageAnimation {
+public class Person implements IImageAnimation {
 	public enum HEALTHSTATUS { INFECTIVE, INFECTED, SUSPECT, HEALTHY };
 	public enum JOBSTATUS { TEACHER, PUPIL };
 	
@@ -68,16 +68,6 @@ public class Person extends Thread implements IImageAnimation {
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
 		this.pcsCord.addPropertyChangeListener(pcl);
 	}
-
-	@Override
-	public void run() {
-		try {
-			while (true) {
-				calculateNewPos();
-				simulateLingering();
-			}
-		} catch (InterruptedException ex) {}
-	}
 	
 	private void calculateNewPos() throws InterruptedException {		
 		int posX = rnd.nextInt(SimulationConstants.MAX_LENGTH_ROOM);
@@ -85,7 +75,7 @@ public class Person extends Thread implements IImageAnimation {
 		
 		Coordinate newCord = new Coordinate(posX, posY);
 		
-		this.pcsCord.firePropertyChange(this.getName(), cord, newCord);
+		this.pcsCord.firePropertyChange(this.getPersonName(), cord, newCord);
 	}
 	
 	private void simulateLingering() throws InterruptedException {
@@ -172,6 +162,7 @@ public class Person extends Thread implements IImageAnimation {
 
 	@Override
 	public void checkEnvironment() {
-		this.pcsCord.firePropertyChange(this.getName(), null, null);
+		System.out.println("not checking environment");
+		//this.pcsCord.firePropertyChange(this.getPersonName(), null, null);
 	}
 }

@@ -18,11 +18,14 @@ import pkgMisc.PersonHealthComparator;
 import pkgMisc.SimulationConstants;
 import pkgSubjects.Person;
 import pkgSubjects.Person.HEALTHSTATUS;
+import pkgSubjects.Person.JOBSTATUS;
 
 public class ThreadController implements PropertyChangeListener {
 	private ArrayList<Person> persons = new ArrayList<>();
 	private ArrayList<EventThreadControllerListener> evtThreadListener = new ArrayList<>();
 	private FileWriter writer = null;
+	
+	private Coordinate entrance = null;
 		
 	public ThreadController() throws IOException {
 		File file = new File(SimulationConstants.logFile);
@@ -30,62 +33,64 @@ public class ThreadController implements PropertyChangeListener {
 		file.createNewFile();
 	}
 	
-	public void generateThreads(int count) {
+	public void generateThreads() {
 		persons.clear();
 		Person.resetDataPool();
 		
 		TILE_TYPES[][] tileTypes = MapLoader.getTileTypes();
 		
-		/*
+		
 		for (int y = 0; y < SimulationConstants.TILE_COUNT_HEIGHT; y++) {
 			for (int x = 0; x < SimulationConstants.TILE_COUNT_WIDTH; x++) {
 				TILE_TYPES type = tileTypes[y][x];
 				
 				if (type == TILE_TYPES.PUPIL_SEAT) {
-					
+					Person p = new Person();
+					p.setJobStatus(JOBSTATUS.PUPIL);
+					p.setMainPosition(new Coordinate(
+						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
+					));
+					persons.add(p);
+				} else if (type == TILE_TYPES.TEACHER_SEAT_CHAMBER) {
+					Person p = new Person();
+					p.setJobStatus(JOBSTATUS.TEACHER);
+					p.setMainPosition(new Coordinate(
+						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
+					));
+					persons.add(p);
+				} else if (type == TILE_TYPES.ENTRANCE && entrance == null) {
+					entrance = new Coordinate(
+						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
+					);
 				}
 			}
 		}
-		*/
 		
+		//entrance.setX(SimulationConstants.TILE_WIDTH);
 		
-		for (int i = 0; i < count; i++) {
-			Person p = new Person();
-			p.addPropertyChangeListener(this);
-			
-			// set infective
-			if ((int)((double)i / count * 100) < SimulationConstants.getPercentInfectedAtStart()) {
-				p.setHealthStatus(Person.HEALTHSTATUS.INFECTIVE);
-			}
-			
+		for (Person p : persons) {
+			p.setCoordinate(entrance);
 			notifyEvtThreadListener(EVENTTYPE.CREATE_PERSON, p);
-			
-			persons.add(p);
-		}
-		
-		
-		
+		}		
 		
 		notifyEvtThreadListener(EventThreadControllerObject.EVENTTYPE.ALL_GENERATED);
 	}
 	
-	public void startThreads() throws IOException {
-		writer = new FileWriter(SimulationConstants.logFile);
+	public void startThreads() throws Exception {
+		// do movements
 		for (Person p : persons) {
-			p.start();			
+			p.setCoordinate(new Coordinate(p.getMainPosition()));
+			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
 		}
 		
-		notifyEvtThreadListener(EventThreadControllerObject.EVENTTYPE.ALL_STARTED);
-	}
-	
-	public void stopThreads() throws IOException {
+		//Thread.sleep(10000);
+		/*
 		for (Person p : persons) {
-			p.interrupt();
+			p.setCoordinate(new Coordinate(entrance));
+			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+			break;
 		}
-		
-		notifyEvtThreadListener(EventThreadControllerObject.EVENTTYPE.ALL_STOPPED);
-		
-		writer.close();
+		*/
 	}
 
 	@Override

@@ -41,7 +41,8 @@ public class Coordinate {
 
 	@Override
 	public String toString() {
-		return "Coordinate [x=" + x + ", y=" + y + "]";
+		//return "Coordinate [x=" + x + ", y=" + y + "]";
+		return "(" + x + "/" + y + ")";
 	}
 	
 	public String toStringShort() {

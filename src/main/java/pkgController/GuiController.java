@@ -62,12 +62,12 @@ public class GuiController implements Initializable, EventThreadControllerListen
     void onBtnClicked(ActionEvent event) {    	    	
     	try {
 	    	if (event.getSource().equals(btnGenerate)) {	    		    			    		
-	    		tc.generateThreads(0);
+	    		tc.generateThreads();
 	    	} else if (event.getSource().equals(btnStart)) {
 	    		tc.startThreads();
 	    		//this.startTime = System.currentTimeMillis();
 	    	} else if (event.getSource().equals(btnStop)) {
-	    		tc.stopThreads();
+	    		//tc.stopThreads();
 	    		
 	    		//long endTime = System.currentTimeMillis();
 	    		
@@ -135,6 +135,8 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			IImageAnimation ia = event.getAnimation();
 			ImageView img = ia.getImageView();
 			
+			System.out.println(ia.getOldCord() + " => " + ia.getCord());
+			
 			Path path = new Path();
 			path.getElements().add(new MoveTo(ia.getOldCord().getX(), ia.getOldCord().getY()));
 			path.getElements().add(new LineTo(ia.getCord().getX(), ia.getCord().getY()));
@@ -143,6 +145,10 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			pathTransition.setDuration(Duration.millis(SimulationConstants.ANIMATION_DURATION * 1000));
 			pathTransition.setPath(path);
 			pathTransition.setNode(img);
+			
+
+			pathTransition.setCycleCount(1);
+			pathTransition.setAutoReverse(false);
 			
 			ia.setMoving(true);
 			
