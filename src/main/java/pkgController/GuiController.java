@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -25,6 +26,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+import pkgData.Settings;
 import pkgMisc.CellFactoryListView;
 import pkgMisc.EventThreadControllerListener;
 import pkgMisc.EventThreadControllerObject;
@@ -41,6 +43,18 @@ import pkgSubjects.Person.HEALTHSTATUS;
 public class GuiController implements Initializable, EventThreadControllerListener {
 
 	@FXML
+	private Slider sliderTests;
+
+	@FXML
+	private Slider sliderVaccinated;
+
+	@FXML
+	private Slider sliderFollowingRules;
+
+	@FXML
+	private Slider sliderInfective;
+	
+	@FXML
 	private Button btnGenerate;
 
 	@FXML
@@ -48,9 +62,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
 
 	@FXML
 	private Button btnStop;
-
-	@FXML
-	private Button btnLog;
 
 	@FXML
 	private ListView<String> lstView;
@@ -61,7 +72,8 @@ public class GuiController implements Initializable, EventThreadControllerListen
     @FXML
     void onBtnClicked(ActionEvent event) {    	    	
     	try {
-	    	if (event.getSource().equals(btnGenerate)) {	    		    			    		
+	    	if (event.getSource().equals(btnGenerate)) {
+	    		tc.setSettings(getSettings());
 	    		tc.generateThreads();
 	    	} else if (event.getSource().equals(btnStart)) {
 	    		tc.startThreads();
@@ -187,5 +199,12 @@ public class GuiController implements Initializable, EventThreadControllerListen
 		}		
 		
 		return ret;
+	}
+	
+	private Settings getSettings() {
+		return new Settings((int)this.sliderInfective.getValue(), 
+							(int)this.sliderFollowingRules.getValue(), 
+							(int)this.sliderTests.getValue(), 
+							(int)this.sliderVaccinated.getValue());
 	}
 }

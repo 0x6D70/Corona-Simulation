@@ -22,6 +22,15 @@ public class Person implements IImageAnimation {
 	private int infectiveContacts;
 	private HEALTHSTATUS health = HEALTHSTATUS.HEALTHY;
 	private JOBSTATUS jobStatus = JOBSTATUS.PUPIL;
+	private Boolean vaccinated = false; 
+
+	public Boolean getVaccinated() {
+		return vaccinated;
+	}
+
+	public void setVaccinated(Boolean vaccinated) {
+		this.vaccinated = vaccinated;
+	}
 
 	private ImageView imgView = null;
 	private boolean isMoving = false;
@@ -48,11 +57,23 @@ public class Person implements IImageAnimation {
 	public void addInfectiveContacts() {
 		this.infectiveContacts++;
 		
+		int minContactsTillInfective = SimulationConstants.MIN_CONTACTS_TILL_INFECTIVE + SimulationConstants.MIN_CONTACTS_TILL_INFECTED + SimulationConstants.MIN_CONTACTS_TILL_SUSPECTED ;
+		int minContactsTillInfected = SimulationConstants.MIN_CONTACTS_TILL_INFECTED + SimulationConstants.MIN_CONTACTS_TILL_SUSPECTED;
+		int minContactsTillSuspected = SimulationConstants.MIN_CONTACTS_TILL_SUSPECTED;
+		
+		if (this.vaccinated) {
+			minContactsTillInfected *=2;
+			minContactsTillSuspected *=2;
+			minContactsTillInfective *=2;
+		}
+		
 		if (this.health == HEALTHSTATUS.INFECTIVE) {
 			// do nothing
-		} else if (this.infectiveContacts >= SimulationConstants.MIN_CONTACTS_TILL_INFECTED + SimulationConstants.MIN_CONTACTS_TILL_SUSPECTED) {
+		} else if (this.infectiveContacts >= minContactsTillInfective) {
+			this.health = HEALTHSTATUS.INFECTIVE;
+		} else if (this.infectiveContacts >= minContactsTillInfected) {
 			this.health = HEALTHSTATUS.INFECTED;
-		} else if (this.infectiveContacts >= SimulationConstants.MIN_CONTACTS_TILL_SUSPECTED) {
+		} else if (this.infectiveContacts >= minContactsTillSuspected) {
 			this.health = HEALTHSTATUS.SUSPECT;
 		}
 	}
@@ -117,6 +138,10 @@ public class Person implements IImageAnimation {
 		this.cord = newCord;		
 	}
 	
+	public Coordinate getCoordinate() {
+		return this.cord;
+	}
+	
 	public void addContact() {
 		this.contacts++;
 	}
@@ -161,7 +186,7 @@ public class Person implements IImageAnimation {
 
 	@Override
 	public void checkEnvironment() {
-		System.out.println("not checking environment");
-		//this.pcsCord.firePropertyChange(this.getPersonName(), null, null);
+		//System.out.println("not checking environment");
+		this.pcsCord.firePropertyChange(this.getPersonName(), null, null);
 	}
 }

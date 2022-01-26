@@ -1,12 +1,15 @@
 package pkgController;
 
+
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Random;
 import pkgData.Coordinate;
+import pkgData.Settings;
 import pkgMisc.EventThreadControllerListener;
 import pkgMisc.EventThreadControllerObject;
 import pkgMisc.MapLoader;
@@ -23,6 +26,8 @@ public class ThreadController implements PropertyChangeListener {
 	private ArrayList<Person> persons = new ArrayList<>();
 	private ArrayList<EventThreadControllerListener> evtThreadListener = new ArrayList<>();
 	private ArrayList<Coordinate> teacherSeats = new ArrayList<>();
+	
+	private Settings settings; 
 	
 	private Coordinate entrance = null;
 		
@@ -49,6 +54,7 @@ public class ThreadController implements PropertyChangeListener {
 					p.setMainPosition(new Coordinate(
 						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
 					));
+					p.addPropertyChangeListener(this);
 					persons.add(p);
 				} else if (type == TILE_TYPES.TEACHER_SEAT_CHAMBER) {
 					Person p = new Person();
@@ -56,6 +62,7 @@ public class ThreadController implements PropertyChangeListener {
 					p.setMainPosition(new Coordinate(
 						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
 					));
+					p.addPropertyChangeListener(this);
 					persons.add(p);
 				} else if (type == TILE_TYPES.ENTRANCE && entrance == null) {
 					entrance = new Coordinate(
@@ -71,7 +78,21 @@ public class ThreadController implements PropertyChangeListener {
 		
 		//entrance.setX(SimulationConstants.TILE_WIDTH);
 		
+		int randnumber;
+		
 		for (Person p : persons) {
+			randnumber = getRandNumber(100);
+			
+			if (randnumber <= settings.getVaccinated()) {
+				p.setVaccinated(true);
+			}
+			
+			randnumber = getRandNumber(100);
+			
+			if (randnumber <= settings.getInfective()) {
+				p.setHealthStatus(HEALTHSTATUS.INFECTIVE);
+			}			
+			
 			p.setCoordinate(entrance);
 			notifyEvtThreadListener(EVENTTYPE.CREATE_PERSON, p);
 		}		
@@ -87,19 +108,31 @@ public class ThreadController implements PropertyChangeListener {
 		}
 		
 		//Thread.sleep(10000);
-		/*
+		
 		for (Person p : persons) {
 			p.setCoordinate(new Coordinate(entrance));
 			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
 			break;
 		}
-		*/
+		
 		
 		// sleep without blocking the thread
 		new Thread( new Runnable() {
 	        public void run()  {
 	        	try {
 		            Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION); // 2s Animation time -> pupil sit for
+		            
+		            int randNumber;
+		            for (int i = 0; i < persons.size(); i++) {
+		            	randNumber = getRandNumber(100);
+		            	Person p = persons.get(i);
+		            	if (p.getHealthStatus() == HEALTHSTATUS.INFECTIVE && randNumber < settings.getTestsUsefull()) {
+		            		p.setCoordinate(entrance);
+		            		notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+		            		persons.remove(i);
+		            		i--;
+		            	}
+		            }
 		            
 		            for (int i = 0; i < SimulationConstants.NUMBER_OF_LESSONS; i++) {
 		            	int counter = 0;
@@ -110,6 +143,7 @@ public class ThreadController implements PropertyChangeListener {
 		            			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
 		            			counter++;
 		            		}
+		            		p.checkEnvironment();
 		            	}
 		            	
 		            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
@@ -152,35 +186,50 @@ public class ThreadController implements PropertyChangeListener {
 			
 			String logMessage = source.getPersonName() + " " + oldCord.toStringShort() + " => " + newCord.toStringShort() + "   ";
 			
-			for (Person p : persons) {
-				if (p == source || p.getMoving() || source.getMoving())
-					continue;
-			
-				
-				// check if p is within the radius
-				double xDiff = newCord.getX() - p.getCord().getX();
-				double yDiff = newCord.getY() - p.getCord().getY();
-				
-				double distance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-				
-				if (distance < SimulationConstants.getCurrentDangerousDistance()) {
-					logMessage += " " + p.getPersonName() + ",";
+			//if person in entrance, not infection possible
+			if (!source.getCoordinate().equals(entrance)) {
+				for (Person p : persons) {
+					if (p == source || p.getMoving() || source.getMoving())
+						continue;
 					
-					if (source.getHealthStatus() == HEALTHSTATUS.INFECTIVE) {
-						p.addInfectiveContacts();
-						notifyEvtThreadListener(EVENTTYPE.UPDATE_HEALTH, p);
-					}				
 					
-					if (p.getHealthStatus() == HEALTHSTATUS.INFECTIVE) {
-						source.addInfectiveContacts();
-						notifyEvtThreadListener(EVENTTYPE.UPDATE_HEALTH, source);
+					// check if p is within the radius
+					double xDiff = newCord.getX() - p.getCord().getX();
+					double yDiff = newCord.getY() - p.getCord().getY();
+					
+					double distance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+					
+					
+					// following rules: if following rules, distance will be doubled
+					if (getRandNumber(100) < settings.getFollowingRules()) {
+						distance += getRandNumber(50);
 					}
 					
-					p.addContact();
-					source.addContact();				
+					
+					if (distance < SimulationConstants.getCurrentDangerousDistance()) {
+						logMessage += " " + p.getPersonName() + ",";
+
+						//rand number: if personen vaccinated, 50% less chance of infecting someone else
+						
+						if (source.getHealthStatus() == HEALTHSTATUS.INFECTIVE) {
+							if (source.getVaccinated() && getRandNumber(2) == 1 || !source.getVaccinated()) {
+								p.addInfectiveContacts();
+								notifyEvtThreadListener(EVENTTYPE.UPDATE_HEALTH, p);
+							}
+						}				
+						
+						if (p.getHealthStatus() == HEALTHSTATUS.INFECTIVE) {
+							if (p.getVaccinated() && getRandNumber(2) == 1 || !p.getVaccinated()) {
+								source.addInfectiveContacts();
+								notifyEvtThreadListener(EVENTTYPE.UPDATE_HEALTH, source);
+							}
+						}
+						
+						p.addContact();
+						source.addContact();				
+					}
 				}
 			}
-			
 			notifyEvtThreadListener(EVENTTYPE.ADD_LOG, logMessage);
 		}
 	}
@@ -221,5 +270,13 @@ public class ThreadController implements PropertyChangeListener {
 		ret.sort(new PersonHealthComparator());
 		
 		return ret;
+	}
+	
+	public void setSettings(Settings s) {
+		this.settings = s;
+	}
+	private int getRandNumber(int upperBound){
+		Random rand = new Random();
+		return rand.nextInt(upperBound);
 	}
  }

@@ -7,6 +7,7 @@ public class SimulationConstants {
 	public static final int MIN_DURATION_STAYING = 3;
 	public static final int MIN_CONTACTS_TILL_SUSPECTED = 1;
 	public static final int MIN_CONTACTS_TILL_INFECTED = 1;
+	public static final int MIN_CONTACTS_TILL_INFECTIVE = 1;
 	public static final String logFile = "log.txt";
 	
 	public static final int X_COO_SHOP = 600; // pixel		add it to moving-pos of customer
@@ -37,10 +38,10 @@ public class SimulationConstants {
 	public static final int TILE_ID_TEACHER_SEAT_CHAMBER = 6;
 	public static final int TILE_ID_ENTRANCE = 7;
 	
-	public static final int NUMBER_OF_LESSONS = 2;
+	public static final int NUMBER_OF_LESSONS = 3;
 	public static final int SLEEP_BETWEEN_ANIMATION = 5000;
 	
-	private static double currentDangerousDistance = 20;
+	private static double currentDangerousDistance = 70;
 	private static int percentInfectedAtStart = 0;
 	
 	public static double getCurrentDangerousDistance() {
