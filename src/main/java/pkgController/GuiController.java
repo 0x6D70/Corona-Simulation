@@ -26,7 +26,6 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
-import pkgData.Settings;
 import pkgMisc.CellFactoryListView;
 import pkgMisc.EventThreadControllerListener;
 import pkgMisc.EventThreadControllerObject;
@@ -73,7 +72,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
     void onBtnClicked(ActionEvent event) {    	    	
     	try {
 	    	if (event.getSource().equals(btnGenerate)) {
-	    		tc.setSettings(getSettings());
 	    		tc.generateThreads();
 	    	} else if (event.getSource().equals(btnStart)) {
 	    		tc.startThreads();
@@ -108,11 +106,46 @@ public class GuiController implements Initializable, EventThreadControllerListen
     		obsStrings = FXCollections.observableArrayList();
     		lstView.setCellFactory(new CellFactoryListView());
     		lstView.setItems(obsStrings);
+    		
+	        sliderFollowingRules.valueProperty().addListener((observable, oldValue, newValue) -> {
+	            newFollowingRulesValue(newValue.intValue());
+	        });
+	        sliderInfective.valueProperty().addListener((observable, oldValue, newValue) -> {
+	            newInfectiveValue(newValue.intValue());
+	        });
+	        sliderTests.valueProperty().addListener((observable, oldValue, newValue) -> {
+	            newTestsValue(newValue.intValue());
+	        });
+	        sliderVaccinated.valueProperty().addListener((observable, oldValue, newValue) -> {
+	            newVaccinatedValue(newValue.intValue());
+	        });
+	        
     	} catch (Exception ex) {
     		//this.lblMessage.setText(ex.getMessage());
     		ex.printStackTrace();
     	}
     }
+    
+    //Slider functions
+    
+    private void newFollowingRulesValue (int i) {
+    	SimulationConstants.setFollowingrules(i);
+    	System.out.println(i);
+    }
+    private void newInfectiveValue (int i) {
+    	SimulationConstants.setInfective(i);
+    	System.out.println(i);
+    }
+    private void newTestsValue (int i) {
+    	SimulationConstants.setTestsusefull(i);
+    	System.out.println(i);
+    }
+    private void newVaccinatedValue (int i) {
+    	SimulationConstants.setVaccinated(i);
+    	System.out.println(i);
+    }
+    
+    
     /**
      * non gui attributes
      */
@@ -199,12 +232,5 @@ public class GuiController implements Initializable, EventThreadControllerListen
 		}		
 		
 		return ret;
-	}
-	
-	private Settings getSettings() {
-		return new Settings((int)this.sliderInfective.getValue(), 
-							(int)this.sliderFollowingRules.getValue(), 
-							(int)this.sliderTests.getValue(), 
-							(int)this.sliderVaccinated.getValue());
 	}
 }

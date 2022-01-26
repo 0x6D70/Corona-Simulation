@@ -44,6 +44,38 @@ public class SimulationConstants {
 	private static double currentDangerousDistance = 70;
 	private static int percentInfectedAtStart = 0;
 	
+	public static int infective = 5;
+	public static int followingRules = 75;
+	public static int testsUsefull = 50;
+	public static int vaccinated = 75;
+	
+	public static void setInfective(int i) {
+		infective = i;
+	}
+	public static void setFollowingrules(int i) {
+		followingRules = i;
+	}
+	public static void setTestsusefull(int i) {
+		testsUsefull = i;
+	}
+	public static void setVaccinated(int i) {
+		vaccinated = i;
+	}
+	
+	
+	public static int getFollowingRules() {
+		return followingRules;
+	}
+	public static int getTestsUsefull() {
+		return testsUsefull;
+	}
+	public static int getInfective() {
+		return infective;
+	}
+	public static int getVaccinated() {
+		return vaccinated;
+	}
+	
 	public static double getCurrentDangerousDistance() {
 		return currentDangerousDistance;
 	}

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import pkgData.Coordinate;
-import pkgData.Settings;
+import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerListener;
 import pkgMisc.EventThreadControllerObject;
 import pkgMisc.MapLoader;
@@ -17,7 +17,6 @@ import pkgMisc.EventThreadControllerObject.EVENTTYPE;
 import pkgMisc.MapLoader.TILE_TYPES;
 import pkgMisc.PersonComparator;
 import pkgMisc.PersonHealthComparator;
-import pkgMisc.SimulationConstants;
 import pkgSubjects.Person;
 import pkgSubjects.Person.HEALTHSTATUS;
 import pkgSubjects.Person.JOBSTATUS;
@@ -26,8 +25,6 @@ public class ThreadController implements PropertyChangeListener {
 	private ArrayList<Person> persons = new ArrayList<>();
 	private ArrayList<EventThreadControllerListener> evtThreadListener = new ArrayList<>();
 	private ArrayList<Coordinate> teacherSeats = new ArrayList<>();
-	
-	private Settings settings; 
 	
 	private Coordinate entrance = null;
 		
@@ -83,13 +80,13 @@ public class ThreadController implements PropertyChangeListener {
 		for (Person p : persons) {
 			randnumber = getRandNumber(100);
 			
-			if (randnumber <= settings.getVaccinated()) {
+			if (randnumber <= SimulationConstants.getVaccinated()) {
 				p.setVaccinated(true);
 			}
 			
 			randnumber = getRandNumber(100);
 			
-			if (randnumber <= settings.getInfective()) {
+			if (randnumber <= SimulationConstants.getInfective()) {
 				p.setHealthStatus(HEALTHSTATUS.INFECTIVE);
 			}			
 			
@@ -126,7 +123,7 @@ public class ThreadController implements PropertyChangeListener {
 		            for (int i = 0; i < persons.size(); i++) {
 		            	randNumber = getRandNumber(100);
 		            	Person p = persons.get(i);
-		            	if (p.getHealthStatus() == HEALTHSTATUS.INFECTIVE && randNumber < settings.getTestsUsefull()) {
+		            	if (p.getHealthStatus() == HEALTHSTATUS.INFECTIVE && randNumber < SimulationConstants.getTestsUsefull()) {
 		            		p.setCoordinate(entrance);
 		            		notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
 		            		persons.remove(i);
@@ -201,7 +198,7 @@ public class ThreadController implements PropertyChangeListener {
 					
 					
 					// following rules: if following rules, distance will be doubled
-					if (getRandNumber(100) < settings.getFollowingRules()) {
+					if (getRandNumber(100) < SimulationConstants.getFollowingRules()) {
 						distance += getRandNumber(50);
 					}
 					
@@ -272,9 +269,6 @@ public class ThreadController implements PropertyChangeListener {
 		return ret;
 	}
 	
-	public void setSettings(Settings s) {
-		this.settings = s;
-	}
 	private int getRandNumber(int upperBound){
 		Random rand = new Random();
 		return rand.nextInt(upperBound);
