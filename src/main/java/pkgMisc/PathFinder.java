@@ -1,6 +1,7 @@
 package pkgMisc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import pkgPathFinder.AStar;
@@ -13,26 +14,23 @@ public class PathFinder {
 	
 	private AStar aStar;
 	private TILE_TYPES[][] tileTypes;
+	private HashMap<Integer, ArrayList<Coordinate>> moves = new HashMap<>();
 	
 	public PathFinder(TILE_TYPES[][] tileTypes) {
 		this.tileTypes = tileTypes;
-		/*
-		aStar = new AStar(tileTypes.length, tileTypes[0].length, new Node(0,0), new Node(0,0));
-		
-		for (int y = 0; y < SimulationConstants.TILE_COUNT_HEIGHT; y++) {
-			for (int x = 0; x < SimulationConstants.TILE_COUNT_WIDTH; x++) {
-				TILE_TYPES type = tileTypes[y][x];
-				
-				if (type != TILE_TYPES.FLOOR) {
-					//aStar.setBlocks( new int[][]{{y, x}});
-				}
-			}
-		}
-		*/
 	}
 	
 	public ArrayList<Coordinate> calculatePath(Coordinate start, Coordinate end) {
-		aStar = new AStar(tileTypes.length, tileTypes[0].length, new Node(start.getY() / 8, start.getX() / 8), new Node(end.getY() / 8, end.getX() / 8));
+		int identifier = start.hashCode() * 13 + end.hashCode();
+		
+		if (moves.containsKey(identifier)) {
+			return moves.get(identifier);
+		}
+		
+		aStar = new AStar(tileTypes.length, tileTypes[0].length,
+				new Node(start.getY() / SimulationConstants.TILE_HEIGHT, start.getX() / SimulationConstants.TILE_WIDTH),
+				new Node(end.getY() / SimulationConstants.TILE_HEIGHT, end.getX() / SimulationConstants.TILE_WIDTH)
+		);
 		
 		for (int y = 0; y < SimulationConstants.TILE_COUNT_HEIGHT; y++) {
 			for (int x = 0; x < SimulationConstants.TILE_COUNT_WIDTH; x++) {
@@ -59,9 +57,6 @@ public class PathFinder {
 			}
 		}
 		
-		//aStar.setInitialNode(new Node(start.getY() / 8, start.getX() / 8));
-		//aStar.setFinalNode(new Node(end.getY() / 8, end.getX() / 8));
-		
 		List<Node> path = aStar.findPath();
 		
 		ArrayList<Coordinate> ret = new ArrayList<>();
@@ -70,6 +65,8 @@ public class PathFinder {
         	System.out.println(node);
             ret.add(new Coordinate(node.getCol() * SimulationConstants.TILE_WIDTH, node.getRow() * SimulationConstants.TILE_HEIGHT));
         }
+        
+        moves.put(identifier, ret);
 		
 		return ret;
 	}
