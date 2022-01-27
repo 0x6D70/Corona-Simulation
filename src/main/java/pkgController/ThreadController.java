@@ -102,16 +102,7 @@ public class ThreadController implements PropertyChangeListener {
 		for (Person p : persons) {
 			p.setCoordinate(new Coordinate(p.getMainPosition()));
 			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
-		}
-		
-		//Thread.sleep(10000);
-		
-		for (Person p : persons) {
-			p.setCoordinate(new Coordinate(entrance));
-			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
-			break;
-		}
-		
+		}		
 		
 		// sleep without blocking the thread
 		new Thread( new Runnable() {
