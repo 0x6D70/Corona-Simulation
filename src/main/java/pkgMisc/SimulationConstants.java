@@ -6,7 +6,7 @@ public class SimulationConstants {
 	public static final int Y_COO_SHOP = 140; // pixel 		add it to moving-pos of customer
 	public static final int IMG_HEIGHT = 24;
 	public static final int IMG_WIDTH = 24;
-	public static final long ANIMATION_DURATION = 2;
+	public static final long ANIMATION_DURATION = 4;
 	
 	public static final String FILE_PERSON_HEALTHY = "/images/healthy.jpg";
 	public static final String FILE_PERSON_INFECTED = "/images/infected.jpg";
@@ -48,7 +48,7 @@ public class SimulationConstants {
 	public static final int MIN_CONTACTS_TILL_INFECTED = 1;
 	public static final int MIN_CONTACTS_TILL_INFECTIVE = 1;
 	
-	public static final int SLEEP_BETWEEN_ANIMATION = 5000;
+	public static final int SLEEP_BETWEEN_ANIMATION = 10000;
 	//--------------------------------------------------------------//
 	
 	

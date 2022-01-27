@@ -29,6 +29,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+import pkgData.Coordinate;
 import pkgMisc.CellFactoryListView;
 import pkgMisc.EventThreadControllerListener;
 import pkgMisc.EventThreadControllerObject;
@@ -36,6 +37,7 @@ import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerObject.EVENTTYPE;
 import pkgMisc.IImageAnimation;
 import pkgMisc.MapLoader;
+import pkgMisc.PathFinder;
 import pkgSubjects.Person;
 import pkgSubjects.Person.HEALTHSTATUS;
 
@@ -111,6 +113,8 @@ public class GuiController implements Initializable, EventThreadControllerListen
     		ml = new MapLoader();
     		ml.loadMap(simulationArea);
     		
+    		pf = new PathFinder(ml.getTileTypes());
+    		
     		imgHealthy = new Image(getClass().getResourceAsStream(SimulationConstants.FILE_PERSON_HEALTHY));
     		imgInfected = new Image(getClass().getResourceAsStream(SimulationConstants.FILE_PERSON_INFECTED));
     		imgInfective = new Image(getClass().getResourceAsStream(SimulationConstants.FILE_PERSON_INFECTIVE));
@@ -164,7 +168,8 @@ public class GuiController implements Initializable, EventThreadControllerListen
     
     private ThreadController tc = null;
     private ObservableList<String> obsStrings;
-    MapLoader ml = null;
+    private MapLoader ml = null;
+    private PathFinder pf = null;
     
     private Image imgHealthy;
     private Image imgInfected;
@@ -198,9 +203,27 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			System.out.println(ia.getOldCord() + " => " + ia.getCord());
 			
 			Path path = new Path();
+			/*
 			path.getElements().add(new MoveTo(ia.getOldCord().getX(), ia.getOldCord().getY()));
 			path.getElements().add(new LineTo(ia.getCord().getX() + (SimulationConstants.TILE_WIDTH/2), ia.getCord().getY() + (SimulationConstants.TILE_HEIGHT / 2)));
-
+			*/
+			
+			ArrayList<Coordinate> p = pf.calculatePath(ia.getOldCord(), ia.getCord());
+			
+			if (p.size() == 0) {
+				System.out.println("fuck");
+				Platform.exit();
+				System.exit(0);
+				return;
+			}
+			
+			path.getElements().add(new MoveTo(p.get(0).getX(), p.get(0).getY()));
+			p.remove(0);
+			
+			for (Coordinate c : p) {
+				path.getElements().add(new LineTo(c.getX() + (SimulationConstants.TILE_WIDTH/2), c.getY() + (SimulationConstants.TILE_HEIGHT / 2)));
+			}
+			
 			PathTransition pathTransition = new PathTransition();
 			pathTransition.setDuration(Duration.millis(SimulationConstants.ANIMATION_DURATION * 1000));
 			pathTransition.setPath(path);
@@ -235,9 +258,22 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			System.out.println(ia.getOldCord() + " => " + ia.getCord());
 			
 			Path path = new Path();
-			path.getElements().add(new MoveTo(ia.getOldCord().getX(), ia.getOldCord().getY()));
-			path.getElements().add(new LineTo(ia.getCord().getX(), ia.getCord().getY()));
+			//path.getElements().add(new MoveTo(ia.getOldCord().getX(), ia.getOldCord().getY()));
+			//path.getElements().add(new LineTo(ia.getCord().getX(), ia.getCord().getY()));
+			
+			// TODO: code duplication
+			
+			ArrayList<Coordinate> p = pf.calculatePath(ia.getOldCord(), ia.getCord());
+			
+			path.getElements().add(new MoveTo(p.get(0).getX(), p.get(0).getY()));
+			p.remove(0);
+			
+			for (Coordinate c : p) {
+				path.getElements().add(new LineTo(c.getX() + (SimulationConstants.TILE_WIDTH/2), c.getY() + (SimulationConstants.TILE_HEIGHT / 2)));
+			}
 
+			// end code duplication
+			
 			PathTransition pathTransition = new PathTransition();
 			pathTransition.setDuration(Duration.millis(SimulationConstants.ANIMATION_DURATION * 1000));
 			pathTransition.setPath(path);
