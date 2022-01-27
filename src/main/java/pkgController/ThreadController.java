@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javafx.print.PrinterJob.JobStatus;
 import pkgData.Coordinate;
 import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerListener;
@@ -122,17 +124,36 @@ public class ThreadController implements PropertyChangeListener {
 		            	}
 		            }
 		            
-		            for (int i = 0; i < SimulationConstants.NUMBER_OF_LESSONS; i++) {
-		            	int counter = 0;
+		            ArrayList<Person> teachers = new ArrayList<Person>();
+		            
+		            for (Person p : persons) {
+		            	if (p.getJobStatus() == JOBSTATUS.TEACHER) {
+		            		teachers.add(p);
+		            	}
+		            }
+		            
+		            for (int i = 0; i < SimulationConstants.NUMBER_OF_LESSONS; i++) {	
 		            	
-		            	for (Person p : persons) {
-		            		if (p.getJobStatus() == JOBSTATUS.TEACHER && counter != teacherSeats.size()) {
+		            	for (int u = 0; u < teacherSeats.size(); u++) {		            		
+		            		
+		            		do{
+		            			randNumber = getRandNumber(teachers.size());
+		            		}while (!teachers.get(randNumber).getCoordinate().equals(teachers.get(randNumber).getMainPosition()));
+		            		System.out.print("Hello there");
+		            		Person teacher = teachers.get(randNumber);
+		            		teacher.setCoordinate(teacherSeats.get(u));
+		            		notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, teacher);
+		            		teacher.checkEnvironment();
+		            	}
+		            	
+		            	/*for (Person p : teachers) {
+		            		if (p.getCoordinate() != p. && counter != teacherSeats.size()) {
 		            			p.setCoordinate(teacherSeats.get(counter));
 		            			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
 		            			counter++;
 		            		}
 		            		p.checkEnvironment();
-		            	}
+		            	}*/
 		            	
 		            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
 		            	

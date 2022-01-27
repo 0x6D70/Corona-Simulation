@@ -130,19 +130,15 @@ public class GuiController implements Initializable, EventThreadControllerListen
     
     private void newFollowingRulesValue (int i) {
     	SimulationConstants.setFollowingrules(i);
-    	System.out.println(i);
     }
     private void newInfectiveValue (int i) {
     	SimulationConstants.setInfective(i);
-    	System.out.println(i);
     }
     private void newTestsValue (int i) {
     	SimulationConstants.setTestsusefull(i);
-    	System.out.println(i);
     }
     private void newVaccinatedValue (int i) {
     	SimulationConstants.setVaccinated(i);
-    	System.out.println(i);
     }
     
     
