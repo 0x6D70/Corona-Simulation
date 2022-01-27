@@ -18,19 +18,13 @@ public class Person implements IImageAnimation {
 	private Coordinate oldCord = null;
 	private Coordinate mainPosition = null;
 
+	private int quarantineDay = 0;
+	
 	private int contacts;
 	private int infectiveContacts;
 	private HEALTHSTATUS health = HEALTHSTATUS.HEALTHY;
 	private JOBSTATUS jobStatus = JOBSTATUS.PUPIL;
 	private Boolean vaccinated = false; 
-
-	public Boolean getVaccinated() {
-		return vaccinated;
-	}
-
-	public void setVaccinated(Boolean vaccinated) {
-		this.vaccinated = vaccinated;
-	}
 
 	private ImageView imgView = null;
 	private boolean isMoving = false;
@@ -182,6 +176,22 @@ public class Person implements IImageAnimation {
 	@Override
 	public boolean getMoving() {
 		return this.isMoving;
+	}
+
+	public int getQuarantineDay() {
+		return quarantineDay;
+	}
+
+	public void setQuarantineDay(int quarantineDay) {
+		this.quarantineDay = quarantineDay;
+	}
+	
+	public Boolean getVaccinated() {
+		return vaccinated;
+	}
+
+	public void setVaccinated(Boolean vaccinated) {
+		this.vaccinated = vaccinated;
 	}
 
 	@Override

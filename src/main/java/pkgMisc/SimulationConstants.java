@@ -1,20 +1,13 @@
 package pkgMisc;
 
 public class SimulationConstants {
-	public static final int MAX_LENGTH_ROOM = 600;
-	public static final int MAX_WIDTH_ROOM = 500;
-	public static final int MAX_DURATION_STAYING = 6;
-	public static final int MIN_DURATION_STAYING = 3;
-	public static final int MIN_CONTACTS_TILL_SUSPECTED = 1;
-	public static final int MIN_CONTACTS_TILL_INFECTED = 1;
-	public static final int MIN_CONTACTS_TILL_INFECTIVE = 1;
-	public static final String logFile = "log.txt";
 	
 	public static final int X_COO_SHOP = 600; // pixel		add it to moving-pos of customer
 	public static final int Y_COO_SHOP = 140; // pixel 		add it to moving-pos of customer
-	public static final int IMG_HEIGHT = 30;
-	public static final int IMG_WIDTH = 30;
+	public static final int IMG_HEIGHT = 24;
+	public static final int IMG_WIDTH = 24;
 	public static final long ANIMATION_DURATION = 2;
+	
 	public static final String FILE_PERSON_HEALTHY = "/images/healthy.jpg";
 	public static final String FILE_PERSON_INFECTED = "/images/infected.jpg";
 	public static final String FILE_PERSON_INFECTIVE = "/images/infective.jpg";
@@ -38,16 +31,26 @@ public class SimulationConstants {
 	public static final int TILE_ID_TEACHER_SEAT_CHAMBER = 6;
 	public static final int TILE_ID_ENTRANCE = 7;
 	
-	public static final int NUMBER_OF_LESSONS = 3;
+	public static double DangerousDistance = 70;
+	
+	//----------------------Personal Settings-----------------------//
+	private static int infective = 10;
+	private static int followingRules = 50;
+	private static int testsUsefull = 50;
+	private static int vaccinated = 60;
+	//----------------------Static settings-------------------------//
+	public static final int AMOUNT_NEW_INFECTED = infective / 10;
+	public static final int DAYS_IN_QUARANTINE = 5;
+	public static final int INFECTED_PEOPLE_BECOME_INFECTIVE = 30;
+	public static final int NUMBER_OF_LESSONS = 1;
+	
+	public static final int MIN_CONTACTS_TILL_SUSPECTED = 1;
+	public static final int MIN_CONTACTS_TILL_INFECTED = 1;
+	public static final int MIN_CONTACTS_TILL_INFECTIVE = 1;
+	
 	public static final int SLEEP_BETWEEN_ANIMATION = 5000;
+	//--------------------------------------------------------------//
 	
-	private static double currentDangerousDistance = 70;
-	private static int percentInfectedAtStart = 0;
-	
-	public static int infective = 5;
-	public static int followingRules = 75;
-	public static int testsUsefull = 50;
-	public static int vaccinated = 75;
 	
 	public static void setInfective(int i) {
 		infective = i;
@@ -61,8 +64,6 @@ public class SimulationConstants {
 	public static void setVaccinated(int i) {
 		vaccinated = i;
 	}
-	
-	
 	public static int getFollowingRules() {
 		return followingRules;
 	}
@@ -77,15 +78,9 @@ public class SimulationConstants {
 	}
 	
 	public static double getCurrentDangerousDistance() {
-		return currentDangerousDistance;
+		return DangerousDistance;
 	}
 	public static void setCurrentDangerousDistance(double currentDangerousDistance) {
-		SimulationConstants.currentDangerousDistance = currentDangerousDistance;
-	}
-	public static int getPercentInfectedAtStart() {
-		return percentInfectedAtStart;
-	}
-	public static void setPercentInfectedAtStart(int percentInfectedAtStart) {
-		SimulationConstants.percentInfectedAtStart = percentInfectedAtStart;
+		SimulationConstants.DangerousDistance = currentDangerousDistance;
 	}
 }

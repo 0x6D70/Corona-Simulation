@@ -6,6 +6,7 @@
 package pkgController;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.animation.PathTransition;
@@ -16,7 +17,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -33,6 +36,7 @@ import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerObject.EVENTTYPE;
 import pkgMisc.IImageAnimation;
 import pkgMisc.MapLoader;
+import pkgSubjects.Person;
 import pkgSubjects.Person.HEALTHSTATUS;
 
 /**
@@ -60,31 +64,43 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	private Button btnStart;
 
 	@FXML
-	private Button btnStop;
-
-	@FXML
 	private ListView<String> lstView;
 
 	@FXML
 	private Pane simulationArea;
+	
+    @FXML
+    private Label labelCountDay;
 	    
     @FXML
     void onBtnClicked(ActionEvent event) {    	    	
     	try {
 	    	if (event.getSource().equals(btnGenerate)) {
+	    		ArrayList<Person> persons = tc.getPersonsSorted();
+	    		
+	    		for (Person p : persons) {
+	    			p.getImageView().setVisible(false);
+	    		}
+	    		
+	    		if (tc.getThread() != null) {
+		    		tc.stopThread();
+	    		}
+	    		
+	    		lstView.getItems().clear();
+	    		
+	    		tc = new ThreadController();
+	    		tc.addEventThreadControllerListener(this);
 	    		tc.generateThreads();
+	    		
+	    		obsStrings = FXCollections.observableArrayList();
+	    		lstView.setCellFactory(new CellFactoryListView());
+	    		lstView.setItems(obsStrings);
+
 	    	} else if (event.getSource().equals(btnStart)) {
+	    		
 	    		tc.startThreads();
-	    		//this.startTime = System.currentTimeMillis();
-	    	} else if (event.getSource().equals(btnStop)) {
-	    		//tc.stopThreads();
-	    		
-	    		//long endTime = System.currentTimeMillis();
-	    		
-	    		//Platform.runLater(() -> this.lblMessage.setText("simulation lasted " + (endTime - this.startTime) + " msec."));
 	    	}
     	} catch (Exception ex) {
-    		//this.lblMessage.setText(ex.getMessage());
     		ex.printStackTrace();
     	}
     }
@@ -92,7 +108,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	try {
-    		MapLoader ml = new MapLoader();
+    		ml = new MapLoader();
     		ml.loadMap(simulationArea);
     		
     		imgHealthy = new Image(getClass().getResourceAsStream(SimulationConstants.FILE_PERSON_HEALTHY));
@@ -148,6 +164,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
     
     private ThreadController tc = null;
     private ObservableList<String> obsStrings;
+    MapLoader ml = null;
     
     private Image imgHealthy;
     private Image imgInfected;
@@ -158,6 +175,8 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	public void onEventThreadControllerChanged(EventThreadControllerObject event) {
 		if (event.getEventThreadType() == EVENTTYPE.ADD_LOG) {
 			Platform.runLater(() -> obsStrings.add(event.getMessage()));
+		} else if (event.getEventThreadType() == EVENTTYPE.NEW_DAY) {
+			Platform.runLater(() -> labelCountDay.setText(Integer.toString(event.getDay())));
 		} else if (event.getEventThreadType() == EVENTTYPE.CREATE_PERSON) {
 			IImageAnimation ia = event.getAnimation();
 			ImageView img = new ImageView();
@@ -180,7 +199,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			
 			Path path = new Path();
 			path.getElements().add(new MoveTo(ia.getOldCord().getX(), ia.getOldCord().getY()));
-			path.getElements().add(new LineTo(ia.getCord().getX(), ia.getCord().getY()));
+			path.getElements().add(new LineTo(ia.getCord().getX() + (SimulationConstants.TILE_WIDTH/2), ia.getCord().getY() + (SimulationConstants.TILE_HEIGHT / 2)));
 
 			PathTransition pathTransition = new PathTransition();
 			pathTransition.setDuration(Duration.millis(SimulationConstants.ANIMATION_DURATION * 1000));
@@ -209,6 +228,44 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			IImageAnimation ia = event.getAnimation();
 			ImageView img = ia.getImageView();
 			img.setImage(getImageFromHealth(ia.getHealthStatus()));
+		} else if (event.getEventThreadType() == EVENTTYPE.QUARANTINE_PERSON) {
+			IImageAnimation ia = event.getAnimation();
+			ImageView img = ia.getImageView();
+			
+			System.out.println(ia.getOldCord() + " => " + ia.getCord());
+			
+			Path path = new Path();
+			path.getElements().add(new MoveTo(ia.getOldCord().getX(), ia.getOldCord().getY()));
+			path.getElements().add(new LineTo(ia.getCord().getX(), ia.getCord().getY()));
+
+			PathTransition pathTransition = new PathTransition();
+			pathTransition.setDuration(Duration.millis(SimulationConstants.ANIMATION_DURATION * 1000));
+			pathTransition.setPath(path);
+			pathTransition.setNode(img);
+			
+
+			pathTransition.setCycleCount(1);
+			pathTransition.setAutoReverse(false);
+			
+			ia.setMoving(true);
+			
+			pathTransition.setOnFinished(new EventHandler<ActionEvent>() {
+			    @Override
+			    public void handle(ActionEvent event) {
+			        ia.setMoving(false);
+			        ia.checkEnvironment();
+			        img.setVisible(false);
+			    }
+			});
+			
+			pathTransition.play();
+			
+			ia.setMoving(true);
+		} else if (event.getEventThreadType() == EVENTTYPE.PERSON_OUT_OF_QUARANTINE){
+			IImageAnimation ia = event.getAnimation();
+			ImageView img = ia.getImageView();
+			img.setImage(getImageFromHealth(ia.getHealthStatus()));
+			img.setVisible(true);
 		} else {
 			//Platform.runLater(() -> this.lblMessage.setText("Threads: " + event.getEventThreadType().name()));	
 		}

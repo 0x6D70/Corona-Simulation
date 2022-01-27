@@ -1,7 +1,5 @@
 package pkgController;
 
-
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -9,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.print.PrinterJob.JobStatus;
+import javafx.scene.control.Label;
 import pkgData.Coordinate;
 import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerListener;
@@ -25,18 +23,19 @@ import pkgSubjects.Person.JOBSTATUS;
 
 public class ThreadController implements PropertyChangeListener {
 	private ArrayList<Person> persons = new ArrayList<>();
+	private ArrayList<Person> personsInQuarantine = new ArrayList<>();
 	private ArrayList<EventThreadControllerListener> evtThreadListener = new ArrayList<>();
 	private ArrayList<Coordinate> teacherSeats = new ArrayList<>();
+	
+	Thread thread = null;
 	
 	private Coordinate entrance = null;
 		
 	public ThreadController() throws IOException {
-		File file = new File(SimulationConstants.logFile);
-		file.delete();
-		file.createNewFile();
 	}
 	
 	public void generateThreads() {
+		
 		persons.clear();
 		Person.resetDataPool();
 		
@@ -100,83 +99,114 @@ public class ThreadController implements PropertyChangeListener {
 	}
 	
 	public void startThreads() throws Exception {
-		// do movements
-		for (Person p : persons) {
-			p.setCoordinate(new Coordinate(p.getMainPosition()));
-			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
-		}		
 		
 		// sleep without blocking the thread
-		new Thread( new Runnable() {
-	        public void run()  {
+		thread = new Thread( new Runnable() {
+	        public void run()  {	
+	        	//Start new Day automatically
 	        	try {
-		            Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION); // 2s Animation time -> pupil sit for
-		            
-		            int randNumber;
-		            for (int i = 0; i < persons.size(); i++) {
-		            	randNumber = getRandNumber(100);
-		            	Person p = persons.get(i);
-		            	if (p.getHealthStatus() == HEALTHSTATUS.INFECTIVE && randNumber < SimulationConstants.getTestsUsefull()) {
-		            		p.setCoordinate(entrance);
-		            		notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
-		            		persons.remove(i);
-		            		i--;
-		            	}
-		            }
-		            
-		            ArrayList<Person> teachers = new ArrayList<Person>();
-		            
-		            for (Person p : persons) {
-		            	if (p.getJobStatus() == JOBSTATUS.TEACHER) {
-		            		teachers.add(p);
-		            	}
-		            }
-		            
-		            for (int i = 0; i < SimulationConstants.NUMBER_OF_LESSONS; i++) {	
-		            	
-		            	for (int u = 0; u < teacherSeats.size(); u++) {		            		
-		            		
-		            		do{
-		            			randNumber = getRandNumber(teachers.size());
-		            		}while (!teachers.get(randNumber).getCoordinate().equals(teachers.get(randNumber).getMainPosition()));
-		            		System.out.print("Hello there");
-		            		Person teacher = teachers.get(randNumber);
-		            		teacher.setCoordinate(teacherSeats.get(u));
-		            		notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, teacher);
-		            		teacher.checkEnvironment();
-		            	}
-		            	
-		            	/*for (Person p : teachers) {
-		            		if (p.getCoordinate() != p. && counter != teacherSeats.size()) {
-		            			p.setCoordinate(teacherSeats.get(counter));
-		            			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
-		            			counter++;
-		            		}
-		            		p.checkEnvironment();
-		            	}*/
-		            	
-		            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
-		            	
-		            	for (Person p : persons) {
-		            		if (p.getJobStatus() == JOBSTATUS.TEACHER && !p.getCord().equals(p.getMainPosition()) ) {
-		            			p.setCoordinate(p.getMainPosition());
-		            			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
-		            		}
-		            	}
-		            	
-		            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
-		            }
-	
-		            // move back to entrance
-		            for (Person p : persons) {
-		    			p.setCoordinate(new Coordinate(entrance));
-		    			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
-		    		}
+	        		int countDays = 0;	
+		    		while(true) {
+		    			
+		    			countDays++;
+		    			notifyEvtThreadListener(EVENTTYPE.NEW_DAY, countDays);				    			
+		    			
+			            //Get People out of Quarantine
+			            for (int i = 0; i < personsInQuarantine.size(); i++) {
+			            	Person p = personsInQuarantine.get(i);
+			            	if (countDays - p.getQuarantineDay() >= SimulationConstants.DAYS_IN_QUARANTINE) {
+			            		p.setHealthStatus(HEALTHSTATUS.HEALTHY);
+			            		persons.add(p);
+			            		personsInQuarantine.remove(i);
+			            		notifyEvtThreadListener(EVENTTYPE.PERSON_OUT_OF_QUARANTINE, p);
+			            	}
+			            }
+		    			
+		    			// do movements to Main Position
+		    			for (Person p : persons) {
+		    				p.setCoordinate(new Coordinate(p.getMainPosition()));
+		    				//new Infected Persons every day (1/10 of infected people at start)
+		    				if (getRandNumber(100) <= SimulationConstants.AMOUNT_NEW_INFECTED) {
+		    					p.setHealthStatus(HEALTHSTATUS.INFECTIVE);
+		    					notifyEvtThreadListener(EVENTTYPE.UPDATE_HEALTH, p);
+		    				}
+		    				//Infected Persons getting Infective
+		    				if (getRandNumber(100) <= SimulationConstants.INFECTED_PEOPLE_BECOME_INFECTIVE && p.getHealthStatus() == HEALTHSTATUS.INFECTED) {
+		    					p.setHealthStatus(HEALTHSTATUS.INFECTIVE);
+		    					notifyEvtThreadListener(EVENTTYPE.UPDATE_HEALTH, p);
+		    				}
+		    				
+		    				notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+		    			}		
+		    			
+			            Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION); // 2s Animation time -> pupil sit for
+			            
+			            //Implementation tests
+			            int randNumber;
+			            
+			            for (int i = 0; i < persons.size(); i++) {
+			            	randNumber = getRandNumber(100);
+			            	Person p = persons.get(i);
+			            	if (p.getHealthStatus() == HEALTHSTATUS.INFECTIVE && randNumber < SimulationConstants.getTestsUsefull()) {
+			            		p.setCoordinate(entrance);
+			            		p.setQuarantineDay(countDays);
+			            		personsInQuarantine.add(p);
+			            		persons.remove(i);
+			            		i--;
+			            		notifyEvtThreadListener(EVENTTYPE.QUARANTINE_PERSON, p);
+			            	}
+			            }
+			            
+			            //Generall Movements
+			            ArrayList<Person> teachers = new ArrayList<Person>();
+			            
+			            for (Person p : persons) {
+			            	if (p.getJobStatus() == JOBSTATUS.TEACHER) {
+			            		teachers.add(p);
+			            	}
+			            }
+			            
+			            for (int i = 0; i < SimulationConstants.NUMBER_OF_LESSONS; i++) {	
+			            	
+			            	// Teachers
+			            	int amountTeachers = teachers.size() >= teacherSeats.size() ? teacherSeats.size() : teachers.size();
+			            	for (int u = 0; u < amountTeachers; u++) {		            	
+			            		do{
+			            			randNumber = getRandNumber(teachers.size());
+			            		}while (!teachers.get(randNumber).getCoordinate().equals(teachers.get(randNumber).getMainPosition()));
+			            		Person teacher = teachers.get(randNumber);
+			            		teacher.setCoordinate(teacherSeats.get(u));
+			            		notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, teacher);
+			            		teacher.checkEnvironment();
+			            	}
+			            	
+			            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
+			            	
+			            	for (Person p : persons) {
+			            		if (p.getJobStatus() == JOBSTATUS.TEACHER && !p.getCord().equals(p.getMainPosition()) ) {
+			            			p.setCoordinate(p.getMainPosition());
+			            			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+			            		}
+			            	}
+			            	
+			            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
+			            }
+		
+			            // move back to entrance
+			            for (Person p : persons) {
+			    			p.setCoordinate(new Coordinate(entrance));
+			    			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+			    		}
+			            
+			            Thread.sleep(5000); //Sleep two seconds between days
+	        		}
 	        	} catch (Exception ex) {
 	        		ex.printStackTrace();
 	        	}
 	        }
-	    } ).start();
+	    });
+		
+		thread.start();
 	}
 
 	@Override
@@ -259,6 +289,12 @@ public class ThreadController implements PropertyChangeListener {
 		}
 	}
 	
+	private void notifyEvtThreadListener(EventThreadControllerObject.EVENTTYPE type, int day ) {
+		for (EventThreadControllerListener listener : this.evtThreadListener) {
+			listener.onEventThreadControllerChanged(new EventThreadControllerObject(this, type, day));
+		}
+	}
+	
 	private void notifyEvtThreadListener(EventThreadControllerObject.EVENTTYPE type, Person person) {
 		for (EventThreadControllerListener listener : this.evtThreadListener) {
 			listener.onEventThreadControllerChanged(new EventThreadControllerObject(this, type, person));
@@ -273,6 +309,18 @@ public class ThreadController implements PropertyChangeListener {
 		return ret;
 	}
 	
+	public void stopThread() {
+		thread.interrupt();
+	}
+	
+	public Thread getThread() {
+		return thread;
+	}
+
+	public void setThread(Thread thread) {
+		this.thread = thread;
+	}
+
 	public ArrayList<Person> getPersonsSortedByHealth() {
 		ArrayList<Person> ret = new ArrayList<>(this.persons);
 		
@@ -280,9 +328,10 @@ public class ThreadController implements PropertyChangeListener {
 		
 		return ret;
 	}
+
+	Random rand = new Random();
 	
 	private int getRandNumber(int upperBound){
-		Random rand = new Random();
 		return rand.nextInt(upperBound);
 	}
  }
