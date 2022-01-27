@@ -35,7 +35,7 @@ public class SimulationConstants {
 	private static int infective = 10;
 	private static int followingRules = 50;
 	private static int testsUsefull = 50;
-	private static int vaccinated = 60;
+	private static int vaccinated = 75;
 	//----------------------Static settings-------------------------//
 	public static final int AMOUNT_NEW_INFECTED = infective / 10;
 	public static final int DAYS_IN_QUARANTINE = 5;
@@ -46,7 +46,7 @@ public class SimulationConstants {
 	public static final int MIN_CONTACTS_TILL_INFECTED = 1;
 	public static final int MIN_CONTACTS_TILL_INFECTIVE = 1;
 	
-	public static final int SLEEP_BETWEEN_ANIMATION = 10000;
+	public static final int SLEEP_BETWEEN_ANIMATION = 5000;
 	//--------------------------------------------------------------//
 	
 	
