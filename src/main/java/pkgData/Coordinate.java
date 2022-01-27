@@ -47,9 +47,10 @@ public class Coordinate {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
+		final int prime2 = 89;
 		int result = 1;
 		result = prime * result + x;
-		result = prime * result + y;
+		result = prime2 * result + y;
 		return result;
 	}
 
