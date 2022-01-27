@@ -2,29 +2,48 @@
 
 Simulation of a classroom
 
-Idea:
+## Idea:
 
-- simulate everyday situation
-- simulate a week of school ⇒ afterwards user can decide if he wants to simulate next week
-- 5 classes (each 20 students ???) + teachers (8) chamber
+- simulate everyday situation (every day starts automatically)
+- 5 classes + teachers chamber
 - the teachers meet after each lesson in the teacher’s chamber
-- entrance
-- no 1:1 mapping between time in real life and simulation ⇒ longer breaks and skip lessons
-- maybe toilet (if enough time)
-- the user can change settings
-    - percent infected at start
-    - how usefull are the tests in %
-    - percentage vaccinated (fix 50% lower chance of getting infected, if infected 50% less chance of infecting someone else)
-    - toggle (% of people who break the rules):
-        - masks
-        - tests
-        - windows
+- students/teachers with positive tests go home and come back after 5 days of quarantine
 
-Potential problems:
+## Sequence of Events:
 
-- it might be boring, because with wrong settings nothing happens (nobody infected or everyone)
+- everyone goes from entry to their seat places
+- one teacher goes to every class / one lesson
+- teacher goes to teachers chamber
+- last two steps repeat
+- everyone goes to entry / day over
+- everything repeats
 
-## Design
 
-![design image](./design.png "Idea of Design")
+## Settings: 
+- the user can change following settings:
+    - percent infected at start in % 
+    - how usefull are the tests in % (how many students are sent home)
+    - percentage vaccinated in % 
+    - toggle (% of people who break the rules)
+    
+- static settings (rules): 
+    - every day new infective people: 10 % of percentage at start (e.g. 20% at start, 2% every day)
+    - every day 30% of infected people become infective
+    - Number of Lessons per day: 3
+    - vaccinations: 50% lower chance of getting infected, if infected 50% less chance of        infecting someone else
+    - no infections at entry/hallway 
+    - Contacts till:
+        - Suspected: 1
+        - Infected: 2
+        - Infective 3
+
+## Possible extentions
+
+- a toilet room / supermarket / smoking place 
+- Counter: How many are currently healthy/suspected/infected/infective
+- new Settings: 
+    - Slider for Number of Lessons per day
+    - Length of quarantine
+    - How affective are vaccinations
+    - if not enough teacher, classes go home
 
