@@ -1,10 +1,13 @@
 package pkgAppl;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -15,6 +18,16 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+    	
+    	// kill all threads on exit
+    	stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	       @Override
+	       public void handle(WindowEvent e) {
+	          Platform.exit();
+	          System.exit(0);
+	       }
+	    });
+    	
         Parent root = FXMLLoader.load(getClass().getResource("/pkgView/FXMLMain.fxml"));
         
         Scene scene = new Scene(root);
