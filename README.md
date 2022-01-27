@@ -4,7 +4,7 @@ Simulation of a classroom
 
 ## Idea:
 
-- simulate everyday situation (every day starts automatically
+- simulate everyday situation (every day starts automatically)
 - 5 classes + teachers chamber
 - the teachers meet after each lesson in the teacher’s chamber
 - students/teachers with positive tests go home and come back after 5 days of quarantine
@@ -31,7 +31,7 @@ Simulation of a classroom
     - every day 30% of infected people become infective
     - Number of Lessons per day: 3
     - vaccinations: 50% lower chance of getting infected, if infected 50% less chance of        infecting someone else
-    - no infections at entry    
+    - no infections at entry/hallway 
     - Contacts till:
         - Suspected: 1
         - Infected: 2
