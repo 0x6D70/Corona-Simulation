@@ -39,7 +39,11 @@ public class PathFinder {
 				TILE_TYPES type = tileTypes[y][x];
 				
 				if (type == TILE_TYPES.WALL) {
-					aStar.setBlocks( new int[][]{{y, x}}); // TODO: block if next to wall
+					aStar.setBlocks( new int[][]{{y, x}});
+				}
+				
+				if (type == TILE_TYPES.PUPIL_SEAT) {
+					aStar.setBlocks( new int[][]{{y-1, x}});
 				}
 				
 				if (!(y + 1 == tileTypes[0].length) && y > 0 && x > 0 && !(x +1 == tileTypes.length)) {

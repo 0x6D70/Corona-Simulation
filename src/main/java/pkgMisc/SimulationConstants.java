@@ -42,7 +42,7 @@ public class SimulationConstants {
 	public static final int AMOUNT_NEW_INFECTED = infective / 10;
 	public static final int DAYS_IN_QUARANTINE = 5;
 	public static final int INFECTED_PEOPLE_BECOME_INFECTIVE = 30;
-	public static final int NUMBER_OF_LESSONS = 1;
+	public static final int NUMBER_OF_LESSONS = 2;
 	
 	public static final int MIN_CONTACTS_TILL_SUSPECTED = 1;
 	public static final int MIN_CONTACTS_TILL_INFECTED = 1;
