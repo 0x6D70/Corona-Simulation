@@ -46,4 +46,5 @@ Simulation of a classroom
     - Length of quarantine
     - How affective are vaccinations
     - if not enough teacher, classes go home
+    - Simulation-Speed
 
