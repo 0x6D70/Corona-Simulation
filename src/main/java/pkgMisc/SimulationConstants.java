@@ -1,9 +1,7 @@
 package pkgMisc;
 
 public class SimulationConstants {
-	
-	public static final int X_COO_SHOP = 600; // pixel		add it to moving-pos of customer
-	public static final int Y_COO_SHOP = 140; // pixel 		add it to moving-pos of customer
+
 	public static final int IMG_HEIGHT = 24;
 	public static final int IMG_WIDTH = 24;
 	public static final long ANIMATION_DURATION = 4;

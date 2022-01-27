@@ -2,12 +2,10 @@ package pkgController;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.scene.control.Label;
 import pkgData.Coordinate;
 import pkgMisc.SimulationConstants;
 import pkgMisc.EventThreadControllerListener;
@@ -16,7 +14,6 @@ import pkgMisc.MapLoader;
 import pkgMisc.EventThreadControllerObject.EVENTTYPE;
 import pkgMisc.MapLoader.TILE_TYPES;
 import pkgMisc.PersonComparator;
-import pkgMisc.PersonHealthComparator;
 import pkgSubjects.Person;
 import pkgSubjects.Person.HEALTHSTATUS;
 import pkgSubjects.Person.JOBSTATUS;
@@ -73,9 +70,7 @@ public class ThreadController implements PropertyChangeListener {
 				}
 			}
 		}
-		
-		//entrance.setX(SimulationConstants.TILE_WIDTH);
-		
+				
 		int randnumber;
 		
 		for (Person p : persons) {
@@ -319,14 +314,6 @@ public class ThreadController implements PropertyChangeListener {
 
 	public void setThread(Thread thread) {
 		this.thread = thread;
-	}
-
-	public ArrayList<Person> getPersonsSortedByHealth() {
-		ArrayList<Person> ret = new ArrayList<>(this.persons);
-		
-		ret.sort(new PersonHealthComparator());
-		
-		return ret;
 	}
 
 	Random rand = new Random();

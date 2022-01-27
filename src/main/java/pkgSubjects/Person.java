@@ -81,22 +81,6 @@ public class Person implements IImageAnimation {
 		this.pcsCord.addPropertyChangeListener(pcl);
 	}
 	
-	/*
-	private void calculateNewPos() throws InterruptedException {		
-		int posX = rnd.nextInt(SimulationConstants.MAX_LENGTH_ROOM);
-		int posY = rnd.nextInt(SimulationConstants.MAX_WIDTH_ROOM);
-		
-		Coordinate newCord = new Coordinate(posX, posY);
-		
-		this.pcsCord.firePropertyChange(this.getPersonName(), cord, newCord);
-	}
-	
-	private void simulateLingering() throws InterruptedException {
-		long sleep = (long) (Math.random() * ((SimulationConstants.MAX_DURATION_STAYING - SimulationConstants.MIN_DURATION_STAYING) * 1000) + SimulationConstants.MIN_DURATION_STAYING * 1000);
-		Thread.sleep(sleep);
-	}
-	*/
-	
 	public JOBSTATUS getJobStatus() {
 		return jobStatus;
 	}
