@@ -220,7 +220,7 @@ public class ThreadController implements PropertyChangeListener {
 			
 			String logMessage = source.getPersonName() + " " + oldCord.toStringShort() + " => " + newCord.toStringShort() + "   ";
 			
-			//if person in entrance, not infection possible
+			//if person in entrance, no infection possible
 			if (!source.getCoordinate().equals(entrance)) {
 				for (Person p : persons) {
 					if (p == source || p.getMoving() || source.getMoving())
