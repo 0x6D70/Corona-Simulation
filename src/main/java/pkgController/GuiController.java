@@ -199,7 +199,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			IImageAnimation ia = event.getAnimation();
 			ImageView img = ia.getImageView();
 			
-			System.out.println(ia.getOldCord() + " => " + ia.getCord());
+			// System.out.println(ia.getOldCord() + " => " + ia.getCord());
 			
 			Path path = new Path();
 			
@@ -236,8 +236,16 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			        ia.checkEnvironment();
 			    }
 			});
-			
-			pathTransition.play();
+
+			new Thread(() -> {
+				try {
+					Thread.sleep((long)(Math.random() * 3000));
+				} catch (Exception ex) {
+					System.out.println(ex.getMessage());
+				} finally {
+					pathTransition.play();
+				}
+			}).start();
 			
 			ia.setMoving(true);
 			
@@ -249,7 +257,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			IImageAnimation ia = event.getAnimation();
 			ImageView img = ia.getImageView();
 			
-			System.out.println(ia.getOldCord() + " => " + ia.getCord());
+			// System.out.println(ia.getOldCord() + " => " + ia.getCord());
 			
 			Path path = new Path();
 						
@@ -281,8 +289,15 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			        img.setVisible(false);
 			    }
 			});
-			
-			pathTransition.play();
+
+			try {
+				Thread.sleep((long)(Math.random() * 3000));
+			} catch (Exception ex) {
+				// ex.printStackTrace();
+				System.out.println(ex.getMessage());
+			} finally {
+				pathTransition.play();
+			}
 			
 			ia.setMoving(true);
 		} else if (event.getEventThreadType() == EVENTTYPE.PERSON_OUT_OF_QUARANTINE){

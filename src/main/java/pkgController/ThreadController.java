@@ -116,7 +116,7 @@ public class ThreadController implements PropertyChangeListener {
 			            		notifyEvtThreadListener(EVENTTYPE.PERSON_OUT_OF_QUARANTINE, p);
 			            	}
 			            }
-		    			
+
 		    			// do movements to Main Position
 		    			for (Person p : persons) {
 		    				p.setCoordinate(new Coordinate(p.getMainPosition()));
@@ -193,7 +193,7 @@ public class ThreadController implements PropertyChangeListener {
 			    			notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
 			    		}
 			            
-			            Thread.sleep(5000); //Sleep two seconds between days
+			            Thread.sleep(SimulationConstants.SLEEP_BETWEEN_DAYS); //Sleep two seconds between days
 	        		}
 	        	} catch (Exception ex) {
 	        		ex.printStackTrace();

@@ -46,7 +46,9 @@ public class SimulationConstants {
 	public static final int MIN_CONTACTS_TILL_INFECTED = 1;
 	public static final int MIN_CONTACTS_TILL_INFECTIVE = 1;
 	
-	public static final int SLEEP_BETWEEN_ANIMATION = 5000;
+	public static final int SLEEP_BETWEEN_ANIMATION = 6000;
+
+	public static final int SLEEP_BETWEEN_DAYS = 10000;
 	//--------------------------------------------------------------//
 	
 	

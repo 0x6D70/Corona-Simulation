@@ -62,7 +62,7 @@ public class PathFinder {
 		ArrayList<Coordinate> ret = new ArrayList<>();
 		
         for (Node node : path) {
-        	System.out.println(node);
+        	// System.out.println(node);
             ret.add(new Coordinate(node.getCol() * SimulationConstants.TILE_WIDTH, node.getRow() * SimulationConstants.TILE_HEIGHT));
         }
         
