@@ -206,12 +206,12 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			ArrayList<Coordinate> p = pf.calculatePath(ia.getOldCord(), ia.getCord());
 			
 			if (p.size() == 0) {
-				System.out.println("fuck");
+				System.out.println("no path found for " + ia.getOldCord() + " => " + ia.getCord());
 				Platform.exit();
 				System.exit(0);
 				return;
 			}
-			
+
 			path.getElements().add(new MoveTo(p.get(0).getX(), p.get(0).getY()));
 			p.remove(0);
 			
@@ -223,7 +223,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			pathTransition.setDuration(Duration.millis(SimulationConstants.ANIMATION_DURATION * 1000));
 			pathTransition.setPath(path);
 			pathTransition.setNode(img);
-			
 
 			pathTransition.setCycleCount(1);
 			pathTransition.setAutoReverse(false);
