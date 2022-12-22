@@ -61,7 +61,7 @@ public class ThreadController implements PropertyChangeListener {
 					persons.add(p);
 				} else if (type == TILE_TYPES.ENTRANCE && entrance == null) {
 					entrance = new Coordinate(
-						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
+						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * (y + 2)
 					);
 				} else if (type == TILE_TYPES.TEACHER_SEAT_CLASS) {
 					teacherSeats.add(new Coordinate(
