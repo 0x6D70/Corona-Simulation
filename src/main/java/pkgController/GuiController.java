@@ -227,8 +227,6 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			pathTransition.setCycleCount(1);
 			pathTransition.setAutoReverse(false);
 			
-			ia.setMoving(true);
-			
 			pathTransition.setOnFinished(new EventHandler<ActionEvent>() {
 			    @Override
 			    public void handle(ActionEvent event) {
@@ -237,6 +235,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			    }
 			});
 
+			/*
 			new Thread(() -> {
 				try {
 					Thread.sleep((long)(Math.random() * 3000));
@@ -244,10 +243,14 @@ public class GuiController implements Initializable, EventThreadControllerListen
 					System.out.println(ex.getMessage());
 				} finally {
 					pathTransition.play();
+					ia.setMoving(true);
 				}
 			}).start();
-			
+			*/
+			pathTransition.play();
 			ia.setMoving(true);
+			
+			// ia.setMoving(true);
 			
 		} else if (event.getEventThreadType() == EVENTTYPE.UPDATE_HEALTH) {
 			IImageAnimation ia = event.getAnimation();
@@ -290,14 +293,7 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			    }
 			});
 
-			try {
-				Thread.sleep((long)(Math.random() * 3000));
-			} catch (Exception ex) {
-				// ex.printStackTrace();
-				System.out.println(ex.getMessage());
-			} finally {
-				pathTransition.play();
-			}
+			pathTransition.play();
 			
 			ia.setMoving(true);
 		} else if (event.getEventThreadType() == EVENTTYPE.PERSON_OUT_OF_QUARANTINE){

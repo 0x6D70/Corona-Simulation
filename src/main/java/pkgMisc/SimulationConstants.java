@@ -6,10 +6,10 @@ public class SimulationConstants {
 	public static final int IMG_WIDTH = 24;
 	public static final long ANIMATION_DURATION = 4;
 	
-	public static final String FILE_PERSON_HEALTHY = "/images/healthy.jpg";
-	public static final String FILE_PERSON_INFECTED = "/images/infected.jpg";
-	public static final String FILE_PERSON_INFECTIVE = "/images/infective.jpg";
-	public static final String FILE_PERSON_SUSPECT = "/images/suspect.jpg";
+	public static final String FILE_PERSON_HEALTHY = "/images/healthy.png";
+	public static final String FILE_PERSON_INFECTED = "/images/infected.png";
+	public static final String FILE_PERSON_INFECTIVE = "/images/infective.png";
+	public static final String FILE_PERSON_SUSPECT = "/images/suspect.png";
 	
 	public static final String FILE_MAP = "/map/map.tmx";
 	public static final String FILE_TILE_SET = "/map/tileset.tsx";
