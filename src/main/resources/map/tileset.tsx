@@ -22,4 +22,7 @@
  <tile id="7" type="entrance">
   <image width="10" height="10" source="./brown.png"/>
  </tile>
+ <tile id="8" type="meeting point">
+  <image width="10" height="10" source="./brown.png"/>
+ </tile>
 </tileset>

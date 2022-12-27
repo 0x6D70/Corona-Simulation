@@ -65,6 +65,9 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	private Button btnStart;
 
 	@FXML
+	private Button btnBreak;
+
+	@FXML
 	private ListView<String> lstView;
 
 	@FXML
@@ -98,9 +101,10 @@ public class GuiController implements Initializable, EventThreadControllerListen
 	    		lstView.setItems(obsStrings);
 
 	    	} else if (event.getSource().equals(btnStart)) {
-	    		
 	    		tc.startThreads();
-	    	}
+	    	} else if (event.getSource().equals(btnBreak)) {
+				tc.doBreak();
+			}
     	} catch (Exception ex) {
     		ex.printStackTrace();
     	}
@@ -207,8 +211,8 @@ public class GuiController implements Initializable, EventThreadControllerListen
 			
 			if (p.size() == 0) {
 				System.out.println("no path found for " + ia.getOldCord() + " => " + ia.getCord());
-				Platform.exit();
-				System.exit(0);
+				// Platform.exit();
+				// System.exit(0);
 				return;
 			}
 
@@ -247,11 +251,9 @@ public class GuiController implements Initializable, EventThreadControllerListen
 				}
 			}).start();
 			*/
+
 			pathTransition.play();
 			ia.setMoving(true);
-			
-			// ia.setMoving(true);
-			
 		} else if (event.getEventThreadType() == EVENTTYPE.UPDATE_HEALTH) {
 			IImageAnimation ia = event.getAnimation();
 			ImageView img = ia.getImageView();

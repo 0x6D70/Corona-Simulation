@@ -23,8 +23,9 @@
       </Pane>
       <Pane layoutX="34.0" layoutY="29.0" prefHeight="147.0" prefWidth="157.0" style="-fx-background-color: lavender;">
          <children>
-            <Button fx:id="btnGenerate" layoutX="12.0" layoutY="39.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="128.0" text="Generate/Reset" />
-            <Button fx:id="btnStart" layoutX="11.0" layoutY="81.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="128.0" text="Start" />
+            <Button fx:id="btnGenerate" layoutX="12.0" layoutY="24.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="128.0" text="Generate/Reset" />
+             <Button fx:id="btnStart" layoutX="11.0" layoutY="66.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="128.0" text="Start" />
+             <Button fx:id="btnBreak" layoutX="11.0" layoutY="105.0" mnemonicParsing="false" onAction="#onBtnClicked" prefHeight="26.0" prefWidth="128.0" text="Break" />
          </children>
       </Pane>
       <ListView fx:id="lstView" layoutX="31.0" layoutY="210.0" prefHeight="664.0" prefWidth="368.0" />

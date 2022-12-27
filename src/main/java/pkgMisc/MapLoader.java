@@ -22,7 +22,8 @@ public class MapLoader {
 		PUPIL_SEAT,
 		TEACHER_SEAT_CLASS,
 		TEACHER_SEAT_CHAMBER,
-		ENTRANCE
+		ENTRANCE,
+		MEETING_POINT,
 	}
 	
 	private static TILE_TYPES[][] tileTypes = new TILE_TYPES[SimulationConstants.TILE_COUNT_HEIGHT][SimulationConstants.TILE_COUNT_WIDTH];
@@ -124,6 +125,8 @@ public class MapLoader {
 			ret = TILE_TYPES.TEACHER_SEAT_CHAMBER;
 		} else if (number == SimulationConstants.TILE_ID_ENTRANCE) {
 			ret = TILE_TYPES.ENTRANCE;
+		} else if (number == SimulationConstants.TILE_ID_MEETING_POINT) {
+			ret = TILE_TYPES.MEETING_POINT;
 		} else {
 			throw new Exception("Unknown Tile ID");
 		}

@@ -28,6 +28,7 @@ public class SimulationConstants {
 	public static final int TILE_ID_TEACHER_SEAT_CLASS = 5;
 	public static final int TILE_ID_TEACHER_SEAT_CHAMBER = 6;
 	public static final int TILE_ID_ENTRANCE = 7;
+	public static final int TILE_ID_MEETING_POINT = 8;
 	
 	public static double DangerousDistance = 70;
 	

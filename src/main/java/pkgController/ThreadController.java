@@ -23,6 +23,13 @@ public class ThreadController implements PropertyChangeListener {
 	private ArrayList<Person> personsInQuarantine = new ArrayList<>();
 	private ArrayList<EventThreadControllerListener> evtThreadListener = new ArrayList<>();
 	private ArrayList<Coordinate> teacherSeats = new ArrayList<>();
+	private ArrayList<Coordinate> meetingPoints = new ArrayList<>();
+
+	private boolean doBreak = false;
+
+	public void doBreak() {
+		doBreak = true;
+	}
 	
 	Thread thread = null;
 	
@@ -65,6 +72,10 @@ public class ThreadController implements PropertyChangeListener {
 					);
 				} else if (type == TILE_TYPES.TEACHER_SEAT_CLASS) {
 					teacherSeats.add(new Coordinate(
+						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
+					));
+				} else if (type == TILE_TYPES.MEETING_POINT) {
+					meetingPoints.add(new Coordinate(
 						SimulationConstants.TILE_WIDTH * x, SimulationConstants.TILE_HEIGHT * y
 					));
 				}
@@ -185,8 +196,38 @@ public class ThreadController implements PropertyChangeListener {
 			            	}
 			            	
 			            	Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
+
+							// make sure it is not the last lesson of the day
+							if (doBreak && i < SimulationConstants.NUMBER_OF_LESSONS - 1) {
+								doBreak = false;
+
+								// do break
+								for (Person p : persons) {
+									// half the students go to a meeting point in the hallway
+									if (p.getJobStatus().equals(JOBSTATUS.PUPIL) && Math.random() < 0.5) {
+										// get random meeting point
+										Coordinate meetingPoint = meetingPoints.get(getRandNumber(meetingPoints.size()));
+										meetingPoint.setX(meetingPoint.getX() + getRandNumber(20) - 10);
+										meetingPoint.setY(meetingPoint.getY() + getRandNumber(20) - 10);
+
+										p.setCoordinate(meetingPoint);
+										notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+									}
+								}
+
+								Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
+
+								for (Person p : persons) {
+									if (p.getJobStatus() == JOBSTATUS.PUPIL && !p.getCoordinate().equals(p.getMainPosition())) {
+										p.setCoordinate(p.getMainPosition());
+										notifyEvtThreadListener(EVENTTYPE.UPDATE_PERSON, p);
+									}
+								}
+
+								Thread.sleep(SimulationConstants.SLEEP_BETWEEN_ANIMATION);
+							}
 			            }
-		
+
 			            // move back to entrance
 			            for (Person p : persons) {
 			    			p.setCoordinate(new Coordinate(entrance));
