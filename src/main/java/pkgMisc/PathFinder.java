@@ -21,7 +21,7 @@ public class PathFinder {
 	}
 	
 	public ArrayList<Coordinate> calculatePath(Coordinate start, Coordinate end) {
-		int identifier = start.hashCode() * 13 + end.hashCode();
+		int identifier = start.hashCode() * 13 * 1000 + end.hashCode();
 		
 		if (moves.containsKey(identifier)) {
 			return moves.get(identifier);
@@ -67,6 +67,8 @@ public class PathFinder {
         }
         
         moves.put(identifier, ret);
+
+		System.out.println(ret);
 		
 		return ret;
 	}
