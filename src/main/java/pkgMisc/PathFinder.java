@@ -68,8 +68,6 @@ public class PathFinder {
         
         moves.put(identifier, ret);
 
-		System.out.println(ret);
-		
 		return ret;
 	}
 }
